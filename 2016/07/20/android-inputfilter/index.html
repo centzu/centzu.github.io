@@ -1,0 +1,688 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="stay foolish,stay hungry" />
+
+
+
+  <meta name="keywords" content="android," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+
+
+
+<!---------------------js------------------------->
+<script type="text/javascript">
+window.onload=function ()
+{
+  var otab1=document.getElementById('tab1');
+  var oa1=document.getElementsByTagName("a")[0]
+  oa1.onmouseover=function ()
+  {
+    startMove(otab1, 'opacity', 100);
+  };
+  oa1.onmouseout=function ()
+  {
+    startMove(otab1, 'opacity', 0);
+  };
+};
+
+function getStyle(obj, name)
+{
+  if(obj.currentStyle)
+  {
+    return obj.currentStyle[name];
+  }
+  else
+  {
+    return getComputedStyle(obj, false)[name];
+  }
+}
+
+function startMove(obj, attr, iTarget)
+{
+  clearInterval(obj.timer);
+  obj.timer=setInterval(function (){
+    var cur=0;
+    
+    if(attr=='opacity')
+    {
+      cur=Math.round(parseFloat(getStyle(obj, attr))*100);
+    }
+    else
+    {
+      cur=parseInt(getStyle(obj, attr));
+    }
+    
+    var speed=(iTarget-cur)/6;
+    speed=speed>0?Math.ceil(speed):Math.floor(speed);
+    
+    if(cur==iTarget)
+    {
+      clearInterval(obj.timer);
+    }
+    else
+    {
+      if(attr=='opacity')
+      {
+        obj.style.filter='alpha(opacity:'+(cur+speed)+')';
+        obj.style.opacity=(cur+speed)/100;
+        
+        document.getElementById('txt1').value=obj.style.opacity;
+      }
+      else
+      {
+        obj.style[attr]=cur+speed+'px';
+      }
+    }
+  }, 30);
+}
+</script>
+  <title> android下EditText的简单输入控制 // 边城的彼方 </title>
+</head>
+
+<body>
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+         <h1 class="site-meta">
+  <!--<span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        
+      </span> 
+      <span class="site-title">边城的彼方</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>-->
+  
+  <a href="/" class="brand">
+      <span class="logo">
+        
+      </span> 
+      <span class="site-title" ><font face="华文行楷">边城的彼方</font></span>
+  </a>
+  <div class="tab" id="tab1">
+    <span  class="site-title"><font face="华文行楷">请拒绝平庸</span></font>
+  </div>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<div class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/">
+            <i class="menu-item-icon icon-home"></i> <br />
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            <i class="menu-item-icon icon-archives"></i> <br />
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            <i class="menu-item-icon icon-tags"></i> <br />
+            Tags
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+<form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'dfS1S9Qk_HTAxBxsdonf','2.0.0');
+</script>
+
+<div class="site-search-toggle"></div>
+    </div>
+  
+</div>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              android下EditText的简单输入控制
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2016-07-20
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/07/20/android-inputfilter/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/20/android-inputfilter/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p><del>昨天，在好友的鼓励下，我尝试一下投简历，毕竟马上大四了，投的是4399的安卓实习生，投完之后，就后悔了，我的简历明明就没有写好！！身边的人很多都去实习了，我明明学得比他们多，但我还在犹豫中，因为我觉得我还能自学很多东西，现在去实习底气不足啊！</del></p>
+<p>以前在做一个安全卫士的android Demo的时候，要用到EditText的输入控制，于是就顺手去baidu（google）TextWatcher和InputFilter了，Fuck，恕我直言，那些排在前面的结果基本都是辣鸡，直接贴了一大串代码，没解析，甚至有几个博客内容一模一样，真是的！</p>
+<p><strong>最后用InputFilter做了一个简单的工具类来控制EditText的输入</strong></p>
+<hr>
+<h2 id="了解InputFilter">了解InputFilter</h2><blockquote>
+<p>public interface InputFilter<br>InputFilters can be attached to Editables to constrain the changes that can be made to them.</p>
+</blockquote>
+<p>InputFilter是一个接口,它可以绑定在编辑框上限制它们的输入。</p>
+<p>它有一个抽象方法filter；<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">abstract</span> CharSequence <span class="title">filter</span> <span class="params">(CharSequence source, </span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">int</span> start, </span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">int</span> end, </span></span></span><br><span class="line"><span class="function"><span class="params">                Spanned dest, </span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">int</span> dstart, </span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">int</span> dend)</span></span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>This method is called when the buffer is going to replace the range dstart … dend of dest with the new text from the range start … end of source.</p>
+</blockquote>
+<p>不知道是不是我的理解有问题，上述谷歌API的解释好像说用从start-end长度的source来替代dstart-dend长度的dest，<del>~那么source应该就是输入后整个文本，dest是输入前的整个文本</del>~<br>&gt;<br><strong>我后面测试了一下，发现不是这样的</strong></p>
+<ul>
+<li>假如原文本是:abcde  </li>
+<li>然后我输入了一个w  </li>
+<li>打印出来的结果是:<br><em>source : w</em><br><em>dest : abcde</em>  </li>
+</ul>
+<p>多次测试也是同样的结果，如果有错请指正。<br>于是就有这样解析</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">abstract</span> CharSequence <span class="title">filter</span> <span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">                CharSequence source,  //新输入的文本</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">int</span> start, //source的起始点</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">int</span> end, //source的结束点</span></span></span><br><span class="line"><span class="function"><span class="params">                Spanned dest, //编辑框中原有的文本</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">int</span> dstart, //dest的起始点</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">int</span> dend//dest的结束点</span></span></span><br><span class="line"><span class="function"><span class="params">                )</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Return the CharSequence that you would like to have placed there instead, including an empty string if appropriate, or null to accept the original replacement.  </p>
+</blockquote>
+<p>方法最后会返回一个你想要的字符串来进行替代（就是把返回的字符串加入原文本后面），一般输入正确返回source，错误返回“”，这是我的理解。</p>
+<p>然后我们就能写完善filter了</p>
+<h2 id="工具类的实现"><strong>工具类的实现</strong></h2><h3 id="1-中文字符输入限制">1.<strong>中文字符输入限制</strong></h3><p>我用了一个简单粗暴的方法，参数str就是要传入的source，直接把str转成字符数组，然后逐个判断它的ASCII码，不在32-126之间一般都是汉字字符了。</p>
+<hr>
+<p><img src="http://asciima.com/img/ascii-Table.jpg" alt="ASCII码"></p>
+<p>所以就有代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isChinessWord</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">char</span>[] cTemp = str.toCharArray();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cTemp.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">32</span> &gt; cTemp[i] || cTemp[i] &gt; <span class="number">126</span>) &#123;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-英文字符限制输入">2.<strong>英文字符限制输入</strong></h3><p>同理<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isLetter</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">char</span>[] cTemp = str.toCharArray();</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cTemp.length; i++) &#123;</span><br><span class="line">           <span class="keyword">if</span> ((<span class="number">97</span> &lt;= cTemp[i] &amp;&amp; cTemp[i] &lt;= <span class="number">122</span>) ||</span><br><span class="line">                   (<span class="number">65</span> &lt;= cTemp[i] &amp;&amp; cTemp[i] &lt;= <span class="number">90</span>)) &#123;</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-手机号码限制输入">3.<strong>手机号码限制输入</strong></h3><p>在上面的基础上加了个判断，第一位是不是1<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isPhone</span><span class="params">(String str, String dstr)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">char</span>[] cTemp = str.toCharArray();</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cTemp.length; i++) &#123;</span><br><span class="line">           <span class="keyword">if</span> (dstr.length() == <span class="number">0</span> &amp;&amp; cTemp[<span class="number">0</span>] != <span class="string">'1'</span>) &#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">           &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cTemp[i] &lt; <span class="number">48</span> &amp;&amp; cTemp[i] &gt; <span class="number">57</span>) &#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-Filter的重写">4.<strong>Filter的重写</strong></h3><p>接下来根据限制模式进行不同的处理，返回不同的值。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> CharSequence <span class="title">filter</span><span class="params">(CharSequence source, <span class="keyword">int</span> start, <span class="keyword">int</span> end, Spanned dest, <span class="keyword">int</span> dstart, <span class="keyword">int</span> dend)</span> </span>&#123;</span><br><span class="line">       String StrSource=source.toString();</span><br><span class="line">       String StrDest=dest.toString();</span><br><span class="line">       <span class="keyword">if</span>(StrSource==<span class="string">"\b"</span>)&#123;</span><br><span class="line">       <span class="comment">//\b退格键</span></span><br><span class="line">           <span class="keyword">return</span> source;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">boolean</span> isRightCharater = <span class="keyword">true</span>;</span><br><span class="line">       <span class="keyword">if</span> (type == INPUT_TYPE_EN) &#123;</span><br><span class="line">           isRightCharater = isLetter(StrSource);</span><br><span class="line">       &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type == INPUT_TYPE_CN) &#123;</span><br><span class="line">           isRightCharater = isChinessWord(StrSource);</span><br><span class="line">       &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type == INPUT_TYPE_PHONE) &#123;</span><br><span class="line">           inputLimit = <span class="number">11</span>;<span class="comment">//长度控制</span></span><br><span class="line">           isRightCharater = isPhone(StrSource, StrDest);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span> (isRightCharater) &#123;</span><br><span class="line">           <span class="keyword">if</span> (StrDest.length() + StrSource.length() &gt; inputLimit) &#123;</span><br><span class="line">               Toast.makeText(context, <span class="string">"字符长度不能超过"</span> + inputLimit + <span class="string">"个"</span>, Toast.LENGTH_SHORT).show();</span><br><span class="line">               <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">return</span> source;</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="结果"><strong>结果</strong></h2><p><img src="http://ww4.sinaimg.cn/mw690/d374fab4gw1f60d06vyvzj20u01hcq7o.jpg" alt="结果"></p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/"> #android </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/18/hello-world/">Hello World</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/17/hook/">Windows下简单hook键盘监听</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2016/07/20/android-inputfilter/"
+               data-title="android下EditText的简单输入控制" data-url="http://yoursite.com/2016/07/20/android-inputfilter/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="http://ww2.sinaimg.cn/large/d374fab4gw1f60e2alz4fj20e80e8gmp.jpg" alt="Rin Hashizora" />
+          <p class="site-author-name">Rin Hashizora</p>
+        </div>
+        <p class="site-description motion-element">stay foolish,stay hungry</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">categories</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#了解InputFilter"><span class="nav-number">1.</span> <span class="nav-text">了解InputFilter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具类的实现"><span class="nav-number">2.</span> <span class="nav-text">工具类的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-中文字符输入限制"><span class="nav-number">2.1.</span> <span class="nav-text">1.中文字符输入限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-英文字符限制输入"><span class="nav-number">2.2.</span> <span class="nav-text">2.英文字符限制输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-手机号码限制输入"><span class="nav-number">2.3.</span> <span class="nav-text">3.手机号码限制输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Filter的重写"><span class="nav-number">2.4.</span> <span class="nav-text">4.Filter的重写</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果"><span class="nav-number">3.</span> <span class="nav-text">结果</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        
+<div class="count">
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+</div>
+
+<div class="copyright">
+  
+  &copy; &nbsp; 
+  2018
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Rin Hashizora</span>
+</div>
+
+<!--<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    by NexT
+  </a>
+</div>-->
+
+
+
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.3"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.3"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.3" id="motion.global"></script>
+
+
+
+  <script type="text/javascript" src="/js/search-toggle.js"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.3" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"centzu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+</body>
+</html>
