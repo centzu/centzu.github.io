@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="C/C++," />
+  <meta name="keywords" content="jvm学习笔记," />
 
 
 
@@ -115,7 +115,7 @@ function startMove(obj, attr, iTarget)
   }, 30);
 }
 </script>
-  <title> 字符与二进制,十六进制互转 // 边城的彼方 </title>
+  <title> jvm中的堆与栈初识 // 边城的彼方 </title>
 </head>
 
 <body>
@@ -238,7 +238,7 @@ function startMove(obj, attr, iTarget)
           
           
             
-              字符与二进制,十六进制互转
+              jvm中的堆与栈初识
             
           
         </h1>
@@ -246,7 +246,7 @@ function startMove(obj, attr, iTarget)
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2015-11-12
+          Posted on 2018-09-02
         </span>
 
         
@@ -255,8 +255,8 @@ function startMove(obj, attr, iTarget)
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/11/12/str2bit/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/12/str2bit/"></span>
+            <a href="/2018/09/02/jvm-call-stack/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/02/jvm-call-stack/"></span>
             </a>
           </span>
           
@@ -270,15 +270,48 @@ function startMove(obj, attr, iTarget)
       
 
       
-        <p>最近做的密码学作业需要把字符转换成二进制格式，下面我研究后所写的代码，记录一下并且分享出来~~~编码什么的真难QAQ,研究的道路还好长呢。。。<br>有什么问题错误欢迎提出！</p>
-<h3 id="头文件">头文件</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="转成16进制">转成16进制</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">strto16</span><span class="params">(<span class="keyword">char</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"0x%02x"</span>,c);<span class="comment">//%02x是指以16进制起且保留后面两位方式格式化</span></span><br><span class="line">	<span class="comment">//用sprintf可能会更好，能赋值，能输出</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="转成2进制">转成2进制</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">strto2</span><span class="params">(<span class="keyword">char</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;<span class="keyword">int</span> j=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> *res=(<span class="keyword">char</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">char</span>)*<span class="number">9</span>);</span><br><span class="line">	<span class="built_in">memset</span>(res,<span class="number">0</span>,<span class="keyword">sizeof</span>(<span class="keyword">char</span>)*<span class="number">9</span>);<span class="comment">//用\0填充</span></span><br><span class="line">	<span class="keyword">char</span> tm[<span class="number">2</span>]=<span class="string">"\0"</span>;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">7</span>;i&gt;<span class="number">-1</span>;i--)</span><br><span class="line">	&#123;</span><br><span class="line">			<span class="keyword">if</span>(c&amp;<span class="number">1</span>)<span class="comment">//&amp;1的结果要么是1要么是0，用来判别c的最低位数字是0还是1</span></span><br><span class="line">				res[i]=<span class="string">'1'</span>;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				res[i]=<span class="string">'0'</span>;</span><br><span class="line">			c=c&gt;&gt;<span class="number">1</span>;<span class="comment">//右移</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="把二进制数据恢复为字符">把二进制数据恢复为字符</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这个的思路就是每8位每8位地读，转成char 赋给res</span></span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">resume</span><span class="params">(<span class="keyword">char</span>* c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">char</span>* res=(<span class="keyword">char</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">char</span>)*<span class="number">30</span>);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">memset</span>(res,<span class="number">0</span>,<span class="keyword">sizeof</span>(res));</span><br><span class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> j=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> k=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;c[i]!=<span class="string">'\0'</span>;i=i+<span class="number">8</span>)<span class="comment">//二进制转十进制</span></span><br><span class="line">	&#123;	</span><br><span class="line">		sum=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(j=<span class="number">7</span>;j&gt;<span class="number">-1</span>;j--)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">int</span> tm=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span>(c[i+j]==<span class="string">'0'</span>)</span><br><span class="line">				tm=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				tm=<span class="number">1</span>;</span><br><span class="line">			sum+=tm*power(<span class="number">7</span>-j);</span><br><span class="line">		&#125;</span><br><span class="line">		res[k]=(<span class="keyword">char</span>)sum;	<span class="comment">//汉字占两字节，计算机会根据编码方式自动识别</span></span><br><span class="line">		k++;				<span class="comment">//所以8位8位地读取就可以了</span></span><br><span class="line">	&#125;</span><br><span class="line">	res[k]=<span class="string">'\0'</span>;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="求幂函数">求幂函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//为了求2的N次幂</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">power</span><span class="params">(<span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span>(b==<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span>(b&gt;<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		a*=<span class="number">2</span>;</span><br><span class="line">		b--;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="主函数">主函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> ch[<span class="number">30</span>]=<span class="string">"\0"</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%s"</span>,ch);</span><br><span class="line">	<span class="keyword">char</span> res[<span class="number">1024</span>]=<span class="string">"\0"</span>;</span><br><span class="line">	<span class="keyword">char</span> res2[<span class="number">100</span>]=<span class="string">"\0"</span>;</span><br><span class="line">	<span class="keyword">while</span>(ch[i]!=<span class="string">'\0'</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//strto16(ch[i]);</span></span><br><span class="line">		<span class="keyword">if</span>(i==<span class="number">0</span>)</span><br><span class="line">			<span class="built_in">strcpy</span>(res,strto2(ch[i]));</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="built_in">strcat</span>(res,strto2(ch[i]));</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"转成2进制后为：%s\n"</span>,res);</span><br><span class="line">	<span class="built_in">strcpy</span>(res2,resume(res));</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"恢复后为：%s"</span>,res2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="效果">效果</h3><p><img src="http://ww2.sinaimg.cn/large/d374fab4gw1exycm3ig0jj20it0cbgmx.jpg" alt="截图"></p>
-<p>由于Windows cmd下是GBK编码，如果不按GBK格式保存中文会乱码</p>
+        <p><del>工作一年了，没有写过blog很久了，看回以前的文章，怎么就觉得有点幼稚。</del></p>
+<p>之前一直对堆和栈的概念比较模糊，只知道堆一般存全局变量，栈是存局部变量，现在根据自己理解总结一下。</p>
+<h1 id="jvm基本储存结构">jvm基本储存结构</h1><h3 id="1-_jvm的主要有这些储存区域：">1. jvm的主要有这些储存区域：</h3><ul>
+<li><p>java堆</p>
+<p>堆在虚拟机启动时就建立了,new出来的对象和数组都会存放在这里，所有线程共享。</p>
+</li>
+<li><p>java栈 <em>(这里我主要指虚拟机栈)</em></p>
+<p>每个jvm线程都有一个私有java栈，java栈中保存着局部变量，操作数栈，<strong>帧信息</strong>。</p>
+</li>
+<li><p>方法区</p>
+<ul>
+<li><p>java6:类加载器在加载Class文件时，会把类信息存放在一块称为方法区的内存空间（PermGen Space 持久代)，所有线程共享。除了类信息外，还会存放常量池信息，包括字符串字面量和数字字面量，这部分是class文件中常量池部分的内存映射，（class文件的解析还待了解），还有静态static变量。</p>
+</li>
+<li><p>java8:持久代取消，由元空间（MetaSpace)取而代之,原来持久代中的一些数据(static变量，字面量string移到java heap中,符号引用symbol移到native heap中）,元空间用本地内存。</p>
+</li>
+</ul>
+</li>
+<li><p>PC寄存器</p>
+<p>PC 寄存器也是每个线程私有的空间。类似于汇编中指向当前运行方法地址的指针？，如果是本地方法，就为undefined。</p>
+</li>
+</ul>
+<p><img src="https://wx2.sinaimg.cn/mw690/d374fab4gy1g0pij8g1azj20us0f6wgb.jpg" alt="jvm内存模型"></p>
+<p>此外，从《实战java虚拟机》一书上了解到还有</p>
+<ul>
+<li><p>直接内存</p>
+<p>直接内存是Java堆外的，直接向内存申请的内存空间（NIO库？），速度优于堆。</p>
+</li>
+</ul>
+<h3 id="2-_java堆，java栈，方法区关系">2. java堆，java栈，方法区关系</h3><p>这部分是比较很多人比较模糊的部分，我用代码来解释一下</p>
+<p>例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">sample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String a=<span class="string">"hello,world"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> sample s1=<span class="keyword">new</span> sample();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(a);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] a)</span></span>&#123;</span><br><span class="line">        sample s2=<span class="keyword">new</span> sample();</span><br><span class="line">        sample s3=<span class="keyword">new</span> sample();</span><br><span class="line">        s2.test();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>根据java8规范，根据我理解，储存粗略情况应该是这样：</p>
+<p><img src="https://wx4.sinaimg.cn/mw690/d374fab4ly1g0phvd1e76j20ix0bp0t1.jpg" alt="运行main()时内存情况"></p>
+<h1 id="java堆">java堆</h1><p>java堆存放几乎所有的对象，是完全自动化管理的，通过垃圾回收机制，垃圾对象会被自动清理。</p>
+<p><img src="https://wx4.sinaimg.cn/mw690/d374fab4gy1g0pij8f5w5j20eb07vq3j.jpg" alt="堆空间的一般结构"></p>
+<blockquote>
+<p>在绝大多情况下，对象会先分配在eden区，在一次新生代回收后，如果对象还存活，则进入From 或 To区域（这两区域会相互变换，研究GC机制时再详细说），之后，没经过一次新生代(Young Generation)回收，如果对象存活，它的年龄就会加1.当对象的年龄达到一定条件后，就会被认为老年对象，从而进入老年代（old Generation)。</p>
+</blockquote>
+<p>这部分涉及GC机制，暂时不细说，以上是大概情况。</p>
+<h1 id="java栈">java栈</h1><p>  Java栈是一块先进后出的数据结构，主要保存内容是栈帧。每一次函数调用，都会有一个对应的栈帧被压入java栈，每一个函数调用结束，都会有栈帧弹出java栈。<br>  按上面1.2的代码为例，当运行到s2.test()时java栈应该时这样的：<br>  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">sample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String a=<span class="string">"hello,world"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> sample s1=<span class="keyword">new</span> sample();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(a);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] a)</span></span>&#123;</span><br><span class="line">        sample s2=<span class="keyword">new</span> sample();</span><br><span class="line">        sample s3=<span class="keyword">new</span> sample();</span><br><span class="line">        s2.test();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://wx1.sinaimg.cn/mw690/d374fab4ly1g0phvfizhgj20r40hiq3g.jpg" alt="帧栈与函数的调用"></p>
+<p>当函数返回时，栈帧从java栈被弹出。<em>无论是正常return还是抛出异常，都会导致栈帧被弹出</em>。<br>在一个栈帧中，至少包含 <strong>局部变量表，操作数栈和帧数据区</strong> 几部分，以后补充~</p>
+<h1 id="总结">总结</h1><p>这篇笔记都是浅尝辄止，还有大量的细节，我要找时间好好整理一下~T-T</p>
 
       
     </div>
@@ -287,7 +320,7 @@ function startMove(obj, attr, iTarget)
       
         <div class="post-tags">
           
-            <a href="/tags/C-C/"> #C/C++ </a>
+            <a href="/tags/jvm学习笔记/"> #jvm学习笔记 </a>
           
         </div>
       
@@ -296,13 +329,11 @@ function startMove(obj, attr, iTarget)
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/11/14/bmpcreate/">文件流创建位图</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/11/08/eduManager/">cmd下教务管理系统</a>
+              <a href="/2016/07/20/android-inputfilter/">android下EditText的简单输入控制</a>
             
           </div>
         </div>
@@ -320,8 +351,8 @@ function startMove(obj, attr, iTarget)
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/11/12/str2bit/"
-               data-title="字符与二进制,十六进制互转" data-url="http://yoursite.com/2015/11/12/str2bit/">
+          <div class="ds-thread" data-thread-key="2018/09/02/jvm-call-stack/"
+               data-title="jvm中的堆与栈初识" data-url="http://yoursite.com/2018/09/02/jvm-call-stack/">
           </div>
         
       </div>
@@ -406,7 +437,7 @@ function startMove(obj, attr, iTarget)
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#头文件"><span class="nav-number">1.</span> <span class="nav-text">头文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转成16进制"><span class="nav-number">2.</span> <span class="nav-text">转成16进制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转成2进制"><span class="nav-number">3.</span> <span class="nav-text">转成2进制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#把二进制数据恢复为字符"><span class="nav-number">4.</span> <span class="nav-text">把二进制数据恢复为字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#求幂函数"><span class="nav-number">5.</span> <span class="nav-text">求幂函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主函数"><span class="nav-number">6.</span> <span class="nav-text">主函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#效果"><span class="nav-number">7.</span> <span class="nav-text">效果</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#jvm基本储存结构"><span class="nav-number">1.</span> <span class="nav-text">jvm基本储存结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_jvm的主要有这些储存区域："><span class="nav-number">1.0.1.</span> <span class="nav-text">1. jvm的主要有这些储存区域：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-_java堆，java栈，方法区关系"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. java堆，java栈，方法区关系</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java堆"><span class="nav-number">2.</span> <span class="nav-text">java堆</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java栈"><span class="nav-number">3.</span> <span class="nav-text">java栈</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

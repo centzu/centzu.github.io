@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="C/C++," />
+  <meta name="keywords" content="Hexo,next" />
 
 
 
@@ -115,7 +115,7 @@ function startMove(obj, attr, iTarget)
   }, 30);
 }
 </script>
-  <title> 模拟扭蛋 // 边城的彼方 </title>
+  <title> Hello World // 边城的彼方 </title>
 </head>
 
 <body>
@@ -238,7 +238,7 @@ function startMove(obj, attr, iTarget)
           
           
             
-              模拟扭蛋
+              Hello World
             
           
         </h1>
@@ -246,7 +246,7 @@ function startMove(obj, attr, iTarget)
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2015-11-06
+          Posted on 2015-06-02
         </span>
 
         
@@ -255,8 +255,8 @@ function startMove(obj, attr, iTarget)
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/11/06/gacha/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/06/gacha/"></span>
+            <a href="/2015/06/02/hello-world/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/02/hello-world/"></span>
             </a>
           </span>
           
@@ -270,38 +270,31 @@ function startMove(obj, attr, iTarget)
       
 
       
-        <p>不少日本游戏都有扭蛋这一骗氪手法，博主身为非洲难民，时刻怀着一颗偷渡的心，就决定模拟一下扭蛋，感受一下震的快感。。。（别笑！）<br>思路很简单，就是先用一个数组保存0-99这一百个数，然后把数组中的元素随机进行多次交换，使这个数组达到随机排列的目的，然后取前十个数，作为扭蛋十连的结果。</p>
-<h3 id="头文件">头文件</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="交换函数">交换函数</h3><p>主要功能是把顺序数组转化成随机数组（伪）</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">exchange</span><span class="params">(<span class="keyword">int</span> *agv,<span class="keyword">int</span> val)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	srand(time(<span class="literal">NULL</span>)/(<span class="number">1</span>+val));</span><br><span class="line">	<span class="comment">//由于计算机运行速度太快，为了让随机数种子每一次都不一样，不能单纯用时间作为变量</span></span><br><span class="line">	<span class="keyword">int</span> temp,temp1,temp2;</span><br><span class="line">	temp1=rand()%<span class="number">100</span>;</span><br><span class="line">	srand(time(<span class="literal">NULL</span>)/(val+<span class="number">2</span>)+<span class="number">1</span>);</span><br><span class="line">	temp2=rand()%<span class="number">100</span>;</span><br><span class="line">	temp=agv[temp1];</span><br><span class="line">	agv[temp1]=agv[temp2];</span><br><span class="line">	agv[temp2]=temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="打印函数">打印函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">niudan</span><span class="params">(<span class="keyword">int</span> *agv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)<span class="comment">//扭蛋十连</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(agv[i]&gt;<span class="number">95</span>)<span class="comment">//当前出UR概率5%</span></span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">"&lt;UR&gt;\t"</span>);</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">"SR\t"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="主函数">主函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> num[<span class="number">100</span>]=&#123;&#125;;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		num[i]=i+<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">putchar</span>(<span class="string">'\n'</span>);</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">		<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">999</span>;i++)<span class="comment">//数组进行了999次交换</span></span><br><span class="line">		&#123;</span><br><span class="line">			exchange(num,i);</span><br><span class="line">		&#125;</span><br><span class="line">		niudan(num);</span><br><span class="line">		getchar();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="结果">结果</h3><p><img src="http://ww2.sinaimg.cn/large/d374fab4gw1exrojdbj44j20il0cbabe.jpg" alt="结果截图"></p>
-<p><br>十次十连震了5次，亚洲人水平，可惜穷人根本没能力10次10连啊QAQ,我要UR！<br></p>
+        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 
       
     </div>
 
     <div class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/C-C/"> #C/C++ </a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/11/07/cmdplayer/">cmd中播放bad apple</a>
+              <a href="/2015/11/06/gacha/">模拟扭蛋</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
-            
-              <a href="/2015/06/02/hello-world/">Hello World</a>
             
           </div>
         </div>
@@ -319,8 +312,8 @@ function startMove(obj, attr, iTarget)
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/11/06/gacha/"
-               data-title="模拟扭蛋" data-url="http://yoursite.com/2015/11/06/gacha/">
+          <div class="ds-thread" data-thread-key="2015/06/02/hello-world/"
+               data-title="Hello World" data-url="http://yoursite.com/2015/06/02/hello-world/">
           </div>
         
       </div>
@@ -405,7 +398,7 @@ function startMove(obj, attr, iTarget)
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#头文件"><span class="nav-number">1.</span> <span class="nav-text">头文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交换函数"><span class="nav-number">2.</span> <span class="nav-text">交换函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打印函数"><span class="nav-number">3.</span> <span class="nav-text">打印函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主函数"><span class="nav-number">4.</span> <span class="nav-text">主函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果"><span class="nav-number">5.</span> <span class="nav-text">结果</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick_Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create_a_new_post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run_server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate_static_files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy_to_remote_sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
