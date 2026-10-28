@@ -2,7 +2,7 @@
 Description=每天 23:30 让蓝色大肥鱼写日记
 
 [Timer]
-OnCalendar=*-*-* 23:30:00
+OnCalendar=*-*-* 23:30:00 Asia/Shanghai
 # 服务器错过了时间点（关机/重启）也补跑一次
 Persistent=true
 # 错开几分钟，避免和备份、证书续期撞在同一秒
