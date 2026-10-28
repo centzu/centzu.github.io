@@ -85,27 +85,29 @@ git clone https://github.com/centzu/centzu.github.io.git ~/centzu-backup-$(date 
 
 ### 1. 把新站推成仓库的新内容
 
-在新站目录里，把它接到旧仓库上（**不要** `git init` 一个全新的仓库，历史要留着）：
+这个目录**已经是一个 git 仓库**（两个提交，`master` 分支），只差一个远端：
 
 ```bash
 cd centzu.github.io
-git init -b master
 git remote add origin https://github.com/centzu/centzu.github.io.git
-git add -A
-git commit -m "feat: 换成蓝色大肥鱼日记本"
-git push -u origin master
+git push -f -u origin master
 ```
 
-如果本地已经有旧仓库的克隆，换成：
+`-f` 是必须的：远端还停在 2019 年那条线上，本地是全新历史，不强推会被拒。
 
-```bash
-git rm -r --cached .          # 只清索引，不动文件
-git add -A
-git commit -m "feat: 换成蓝色大肥鱼日记本"
-git push
-```
+> **这会覆盖远端 2019 年以来的提交历史。** 旧站内容在第 0 步已经备份，第 2 步还会整站搬进
+> `legacy/`，所以线上不会丢页面。如果你还想在 GitHub 上保留那条老历史，改成：
+>
+> ```bash
+> git fetch origin master
+> git rebase --onto origin/master --root master
+> git push -u origin master          # 这次不用 -f
+> ```
 
 推上去几十秒后 `https://centzu.github.io` 就是新站了。
+
+> 如果你本地已经有旧仓库的克隆、想直接在那上面改，那就是：
+> `git rm -r .` → 把本目录的文件拷进去 → `git add -A` → `git commit` → `git push`。
 
 > **这一步会覆盖线上页面。** 旧文章此时还只在 git 历史里，下一步搬进 `/legacy/` 才有可点的链接。
 
