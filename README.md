@@ -1,4 +1,4 @@
-# 蓝色大肥鱼日记本
+# 蓝色大肥鱼的日记
 
 把 `centzu.github.io` 从 2019 年停更的 Hexo 博客，换成一条鱼每天写的日记站。
 
@@ -45,6 +45,7 @@ centzu.github.io/
 │  ├─ diary.sh                 ← 主流程：收素材 → 调模型 → 校验 → 构建 → 推送
 │  ├─ collect_chat.py          ← 从 DSH 会话日志里取当天聊天（含脱敏）
 │  ├─ collect_news.py          ← 抓 ACG / 游戏新闻（含敏感词过滤）
+│  ├─ festival.py              ← 查当天是不是节假日（服务器联网查 + 缓存）
 │  ├─ persona.yml              ← 给 dsh 的系统提示词覆盖层（大肥鱼人设）
 │  ├─ prompt.md                ← 日记任务模板
 │  ├─ install.sh               ← 装 systemd timer
@@ -202,13 +203,28 @@ sudo journalctl -u dsh-diary.service -f
    QQ 号、手机号、邮箱、链接全部替换成 `[号码]` / `[链接]`。
 3. **收新闻**：巴哈姆特 GNN、4Gamers、机核、Anime News Network、B 站番剧时间表，
    取最近 48 小时、最多 8 条；只把政治 / 时事 / 地域对立类整条丢掉，娱乐八卦照收。
-4. **选来源**：有聊天 → `source: chat`；没聊天但有新闻 → `source: acg`；都没有 → `source: quiet`。
-5. **调模型**：`dsh --profile headless --patch _ops/persona.yml "<prompt>"`，
-   人设走 `persona.yml`（系统提示词），当天素材和格式要求走 `prompt.md`。超时 420 秒，失败重试一次。
-6. **校验**：必须带 front-matter、正文 ≥150 字；不够就**不写、不推**，日志里留原因。
-7. **构建 + 推送**：`node site/build.mjs` → `git commit` → `git push`；推失败会 `pull --rebase` 再试一次。
+4. **查节日**：`festival.py` 问一次 timor.tech 的节假日接口（北京时区），是节假日就把名字和
+   「从哪个角度想」写进 prompt（例如国庆 → 假期、堵车、人山人海、宅家）。**日期不在仓库里写死**，
+   每年自动算；结果缓存到 `~/.dsh-diary/festivals/`，断网时用缓存。
+5. **选来源**：有聊天 → `source: chat`；没聊天但有新闻 → `source: acg`；都没有 → `source: quiet`。
+6. **调模型**：`dsh --profile headless --patch _ops/persona.yml "<prompt>"`，
+   人设走 `persona.yml`（系统提示词），当天素材、节日和格式要求走 `prompt.md`。超时 420 秒，失败重试一次。
+7. **校验**：必须带 front-matter、正文 ≥150 字；不够就**不写、不推**，日志里留原因。
+   是节日的话会把 `festival: 国庆节` 写进 front-matter，站点据此渲染那枚黄色小标签。
+8. **构建 + 推送**：`node site/build.mjs` → `git commit` → `git push`；推失败会 `pull --rebase` 再试一次。
 
 日志：`~/.dsh-diary/logs/diary-YYYY-MM-DD.log`，也进 `journalctl`。
+
+### 节日是怎么认出来的
+
+`_ops/festival.py` 调 `timor.tech` 的免费节假日接口，拿到当天的节日名，再翻成统一叫法
+（接口在春节假期里会返回「初一」「初二」，脚本统一成「春节」）。**仓库里没有年份表**，
+2031 年、2042 年都不用改代码。
+
+- 覆盖的是**放假的节日**：元旦、春节（含除夕）、清明节、劳动节、端午节、中秋节、国庆节。
+- 七夕、重阳、腊八、小年这类不放假的传统节日不在接口里。想写的话直接在 Markdown 的
+  front-matter 里加一行 `festival: 七夕`，页面照样会显示那枚小标签。
+- 断网时用 `~/.dsh-diary/festivals/YYYY-MM-DD.json` 的缓存；再不行就当普通日子写，不阻塞。
 
 ---
 
@@ -225,6 +241,8 @@ sudo journalctl -u dsh-diary.service -f
 | 立绘 / 头像 | 换 `site/assets/img/whale-*.webp`，头像按比例裁 | 重新构建 |
 | 日记页旁边那只 | `site/build.mjs` 的 `entryPage` + `style.css` 的 `.companion`（≥1240px 才显示） | 重新构建 |
 | 新闻源 | `_ops/collect_news.py` 的 `RSS_SOURCES` | 下一篇日记 |
+| 节日的感想角度 | `_ops/festival.py` 的 `HINTS` | 下一篇日记 |
+| 关掉节日功能 | 删掉 `_ops/diary.sh` 里调 `festival.py` 那三行 | 下一篇日记 |
 | 敏感词 | 同上 `BLOCK_WORDS` | 下一篇日记 |
 | 推送时间 | `sudo ./_ops/install.sh --time 22:30` | 立即 |
 

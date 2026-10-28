@@ -91,7 +91,8 @@ CHAT_TMP="$(mktemp)"
 NEWS_TMP="$(mktemp)"
 PROMPT_TMP="$(mktemp)"
 RAW_TMP="$(mktemp)"
-trap 'rm -f "${CHAT_TMP:-}" "${NEWS_TMP:-}" "${PROMPT_TMP:-}" "${RAW_TMP:-}" 2>/dev/null || true' EXIT
+FEST_TMP="$(mktemp)"
+trap 'rm -f "${CHAT_TMP:-}" "${NEWS_TMP:-}" "${PROMPT_TMP:-}" "${RAW_TMP:-}" "${FEST_TMP:-}" 2>/dev/null || true' EXIT
 
 if ! "$PY" _ops/collect_chat.py --hours 26 >"$CHAT_TMP" 2>>"$LOG"; then
   echo "（聊天记录没读出来，今天先不写这个）。" >"$CHAT_TMP"
@@ -99,6 +100,11 @@ fi
 
 if ! "$PY" _ops/collect_news.py --hours 48 --limit 8 >"$NEWS_TMP" 2>>"$LOG"; then
   echo "（今天没抓到什么新闻，可能是网又抽了）。" >"$NEWS_TMP"
+fi
+
+# 今天是不是节假日：交给服务器联网查（结果会缓存），断了就当作不是
+if ! "$PY" _ops/festival.py --date "$DATE" >"$FEST_TMP" 2>>"$LOG"; then
+  echo '{}' >"$FEST_TMP"
 fi
 
 if grep -q "今天没人来找我" "$CHAT_TMP"; then
@@ -111,17 +117,33 @@ else
 fi
 
 # ── 2. 拼 prompt ──────────────────────────────────────────
-"$PY" - "$DATE" "$WEEKDAY_CN" "$CHAT_TMP" "$NEWS_TMP" "$SOURCE" "$PROMPT_TMP" <<'PYEOF'
+"$PY" - "$DATE" "$WEEKDAY_CN" "$CHAT_TMP" "$NEWS_TMP" "$SOURCE" "$PROMPT_TMP" "$FEST_TMP" <<'PYEOF'
+import json
 import sys
 
-date, weekday, chat_path, news_path, source, out_path = sys.argv[1:7]
+date, weekday, chat_path, news_path, source, out_path, fest_path = sys.argv[1:8]
 tpl = open("_ops/prompt.md", encoding="utf-8").read()
 chat = open(chat_path, encoding="utf-8").read().strip()
 news = open(news_path, encoding="utf-8").read().strip()
+try:
+    fest = json.load(open(fest_path, encoding="utf-8"))
+except (OSError, ValueError):
+    fest = {}
+
+if fest.get("name"):
+    festival = (
+        "今天是%s。可以写一段你对这个节日的真实感想（不是感谢、不是歌颂）："
+        "从「%s」这类细节里挑你真有感觉的写，也可以吐槽。"
+        % (fest["name"], fest.get("hint") or "放假、吃食、老规矩")
+    )
+else:
+    festival = "今天不是节日，按平常写就行。"
+
 text = (tpl.replace("{{DATE}}", date)
            .replace("{{WEEKDAY}}", weekday)
            .replace("{{CHAT}}", chat)
            .replace("{{NEWS}}", news)
+           .replace("{{FESTIVAL}}", festival)
            .replace("{{SOURCE}}", source))
 open(out_path, "w", encoding="utf-8").write(text)
 PYEOF
@@ -157,11 +179,12 @@ if [[ "$ok" -ne 1 ]]; then
 fi
 
 # ── 4. 清洗与校验 ─────────────────────────────────────────
-"$PY" - "$RAW_TMP" "$ENTRY" "$DATE" "$SOURCE" "$LOG" <<'PYEOF'
+"$PY" - "$RAW_TMP" "$ENTRY" "$DATE" "$SOURCE" "$LOG" "$FEST_TMP" <<'PYEOF'
+import json
 import re
 import sys
 
-raw_path, entry_path, date, source, log_path = sys.argv[1:6]
+raw_path, entry_path, date, source, log_path, fest_path = sys.argv[1:7]
 raw = open(raw_path, encoding="utf-8").read().replace("\r\n", "\n").strip()
 
 # 去掉模型偶尔加的代码块围栏和开场白
@@ -197,6 +220,15 @@ if not fields.get("date"):
 fields["date"] = date
 fields["source"] = source
 
+try:
+    fest = json.load(open(fest_path, encoding="utf-8"))
+except (OSError, ValueError):
+    fest = {}
+if fest.get("name"):
+    fields["festival"] = fest["name"]
+else:
+    fields.pop("festival", None)
+
 body = re.sub(r"^(正文|日记|正文：)[:：]?\s*", "", body).strip()
 body_chars = len(re.sub(r"\s", "", body))
 if body_chars < 150:
@@ -211,7 +243,7 @@ if not fields.get("mood"):
 if "tags" not in fields:
     fields["tags"] = "[日常]"
 
-order = ["date", "mood", "weather", "rice", "tags", "summary", "source"]
+order = ["date", "mood", "weather", "rice", "tags", "summary", "festival", "source"]
 out_head = "\n".join("%s: %s" % (k, fields[k]) for k in order if k in fields)
 text = "---\n%s\n---\n\n%s\n" % (out_head, body)
 open(entry_path, "w", encoding="utf-8").write(text)

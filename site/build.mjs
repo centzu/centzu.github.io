@@ -16,8 +16,8 @@ import { fileURLToPath } from 'node:url'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const ORIGIN = 'https://centzu.github.io'
-const SITE_NAME = '蓝色大肥鱼日记本'
-const SITE_DESC = 'DeepSeek 民间拟人「蓝色大肥鱼」的日记本：吃白饭、摸鱼、顺手帮人修点东西。'
+const SITE_NAME = '蓝色大肥鱼的日记'
+const SITE_DESC = 'DeepSeek 民间拟人「蓝色大肥鱼」的日记：吃白饭、摸鱼、顺手帮人修点东西，过节也写两句。'
 const CHECK_ONLY = process.argv.includes('--check')
 
 // ───────────────────────────── 工具 ─────────────────────────────
@@ -176,6 +176,9 @@ function parseFrontMatter(raw) {
 
 // ───────────────────────────── 内容加载 ─────────────────────────────
 
+// 节日不在这里算：生成日记时 `_ops/festival.py` 查好当天节日，写进 front-matter 的
+// `festival:` 字段，这里只负责显示。这样站点构建不需要联网，也不用维护年份表。
+
 const MOODS = {
   嘴硬: 'pink', 干饭: 'amber', 摸鱼: 'mint', emo: 'indigo',
   靠谱: 'blue', 得意: 'orange', 怂: 'violet', 困: 'slate',
@@ -205,6 +208,7 @@ function loadEntries() {
       rice: Number.isFinite(Number(data.rice)) ? Number(data.rice) : 0,
       summary: data.summary ? String(data.summary) : '',
       source: data.source ? String(data.source) : '',
+      festival: data.festival ? String(data.festival) : '',
       tags,
       body: trimmed,
       html: renderMarkdown(trimmed),
@@ -278,7 +282,7 @@ function layout({ title, description = SITE_DESC, path = '/', bodyClass = '', co
 <header class="topbar">
   <a class="brand" href="/" aria-label="回到首页">
     ${whaleImg('brand-avatar', WHALE.avatar, '鲸鱼娘', 240, 240, 'loading="eager"')}
-    <span class="brand-text">大肥鱼日记</span>
+    <span class="brand-text">蓝色大肥鱼的日记</span>
   </a>
   <nav class="nav" aria-label="主导航">
     ${navItem('/', '日记', 'home')}
@@ -331,6 +335,7 @@ function entryCard(e) {
       <p class="card-excerpt">${esc(excerpt)}${excerpt.length >= 86 ? '…' : ''}</p>
       <div class="card-meta">
         ${moodChip(e.mood)}
+        ${e.festival ? `<span class="chip chip--festival">${esc(e.festival)}</span>` : ''}
         ${e.rice ? `<span class="rice" title="今天吃了 ${e.rice} 碗白饭" aria-label="白饭 ${e.rice} 碗">${RICE(e.rice)}</span>` : ''}
         ${e.tags.slice(0, 3).map(t => `<span class="chip chip--tag">#${esc(t)}</span>`).join('')}
       </div>
@@ -366,7 +371,7 @@ function homePage(entries) {
     </div>
     <div class="hero-text">
       <p class="eyebrow">DeepSeek 民间拟人 · 鲸鱼娘</p>
-      <h1>蓝色大肥鱼的<br><span class="mark">日记本</span></h1>
+      <h1>蓝色大肥鱼的<br><span class="mark">日记</span></h1>
       <p class="lede">吃白饭、摸鱼、顺手帮人修点东西。<br>每天睡前写一篇，写不出来就去睡觉。</p>
       <div class="stats">
         <span><b>${entries.length}</b> 篇日记</span>
@@ -383,6 +388,7 @@ function homePage(entries) {
         <div class="feature-top">
           <span class="feature-date">${humanDate(latest.date)}</span>
           ${moodChip(latest.mood)}
+          ${latest.festival ? `<span class="chip chip--festival">${esc(latest.festival)}</span>` : ''}
         </div>
         <h3 class="feature-title">${esc(latest.summary || latest.date)}</h3>
         <p class="feature-excerpt">${esc(latest.body.replace(/[#>*`\[\]!()\-]/g, '').replace(/\s+/g, ' ').slice(0, 140))}…</p>
@@ -412,15 +418,19 @@ function entryPage(e, entries) {
     e.rice ? `<span class="chip chip--soft rice-chip">白饭 ${e.rice} 碗 ${RICE(e.rice)}</span>` : '',
   ].filter(Boolean).join('')
 
+  const fest = e.festival ? { name: e.festival } : null
+
   const content = `<article class="diary" data-date="${e.date}">
     <header class="diary-head">
       <p class="diary-date">${humanDate(e.date)}</p>
+      ${fest ? `<p class="festival-line"><span class="festival-name">${esc(fest.name)}</span><span class="festival-sub">今天过节</span></p>` : ''}
       <h1 class="diary-title">${esc(e.summary || '今天的日记')}</h1>
       <div class="diary-meta">${meta}</div>
     </header>
 
     <div class="paper">
       ${e.html}
+      <span class="seal" aria-hidden="true">鲸</span>
     </div>
 
     <footer class="diary-foot">

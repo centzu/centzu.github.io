@@ -26,7 +26,8 @@
   --fish-belly: #8296ff;
   --fish-blush: #ffb7c9;
   --fish-shadow: rgba(77, 107, 254, 0.16);
-  --radius: 22px;
+  --radius: 24px;
+  --tape: rgba(255, 207, 107, 0.55);
   --wrap: 760px;
   --font: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Source Han Sans SC",
     "Microsoft YaHei", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -50,6 +51,7 @@
   --fish-body: #6f88ff;
   --fish-belly: #a3b4ff;
   --fish-shadow: rgba(111, 136, 255, 0.16);
+  --tape: rgba(255, 207, 107, 0.32);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -98,6 +100,25 @@ body {
 }
 
 ::selection { background: var(--brand); color: #fff; }
+
+/* 三团很淡的色块：粉 / 蓝 / 薄荷，给页面一点温度 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(34% 26% at 5% 3%, rgba(255, 183, 201, 0.20), transparent 70%),
+    radial-gradient(42% 32% at 97% 6%, rgba(77, 107, 254, 0.14), transparent 72%),
+    radial-gradient(36% 26% at 80% 99%, rgba(159, 227, 208, 0.16), transparent 72%);
+}
+
+:root[data-theme="dark"] body::before { opacity: 0.55; }
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] body::before { opacity: 0.55; }
+}
 
 a { color: var(--brand-2); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
 a:hover { color: var(--brand); }
@@ -446,11 +467,11 @@ pre.code code { background: none; padding: 0; font-size: 0.88em; }
 }
 
 .section-head h2::before {
-  content: "◆";
-  color: var(--brand);
-  font-size: 12px;
-  margin-right: 8px;
-  vertical-align: 2px;
+  content: "✦";
+  color: var(--pink);
+  font-size: 14px;
+  margin-right: 7px;
+  vertical-align: 1px;
 }
 
 .section-head a {
@@ -465,6 +486,7 @@ pre.code code { background: none; padding: 0; font-size: 0.88em; }
 /* ── 卡片 ────────────────────────────────────────────── */
 
 .card {
+  position: relative;
   background: var(--paper-bg);
   border: 2px solid var(--line-strong);
   border-radius: var(--radius);
@@ -573,6 +595,25 @@ pre.code code { background: none; padding: 0; font-size: 0.88em; }
   color: var(--ink-2);
   background: transparent;
   border: 1.5px solid var(--line-strong);
+}
+
+.chip--festival {
+  color: #8a5a00;
+  background: var(--rice);
+  border: 1.5px dashed #e9bf5f;
+  font-weight: 800;
+}
+
+:root[data-theme="dark"] .chip--festival {
+  color: #ffd98a;
+  border-color: #6b5320;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] .chip--festival {
+    color: #ffd98a;
+    border-color: #6b5320;
+  }
 }
 
 .tone-pink   { background: #ffe7ee; color: #b53a63; border-color: #ffc9da; }
@@ -729,6 +770,38 @@ pre.code code { background: none; padding: 0; font-size: 0.88em; }
   color: var(--ink-3);
 }
 
+.festival-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 12px;
+  padding: 4px 13px 4px 11px;
+  background: var(--rice);
+  border: 2px dashed #e9bf5f;
+  border-radius: 999px;
+  transform: rotate(-1.5deg);
+}
+
+.festival-name {
+  font-size: 13.5px;
+  font-weight: 900;
+  color: #8a5a00;
+  letter-spacing: 0.02em;
+}
+
+.festival-sub {
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+
+:root[data-theme="dark"] .festival-name { color: #ffd98a; }
+:root[data-theme="dark"] .festival-line { border-color: #6b5320; }
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] .festival-name { color: #ffd98a; }
+  :root[data-theme="auto"] .festival-line { border-color: #6b5320; }
+}
+
 .diary-title {
   margin: 0 0 14px;
   font-size: clamp(26px, 5vw, 34px);
@@ -821,6 +894,56 @@ pre.code code { background: none; padding: 0; font-size: 0.88em; }
 .paper a { text-decoration: underline; }
 
 .paper img { display: block; margin: 22px auto; box-shadow: 0 4px 0 var(--shadow-soft); }
+
+/* 落在纸角的小邮戳 */
+.seal {
+  position: absolute;
+  top: -20px;
+  right: 28px;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border: 2.5px solid var(--brand);
+  border-radius: 50%;
+  color: var(--brand);
+  background: color-mix(in srgb, var(--paper-bg) 72%, transparent);
+  font-family: "Songti SC", "STSong", "SimSun", serif;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1;
+  transform: rotate(-14deg);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* 和纸胶带：贴在置顶卡片和日记纸上 */
+.card--feature::before,
+.paper::after {
+  content: "";
+  position: absolute;
+  width: 92px;
+  height: 26px;
+  background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0 6px, transparent 6px 12px),
+    var(--tape);
+  border-radius: 3px;
+  box-shadow: 0 2px 0 var(--shadow-soft);
+  pointer-events: none;
+}
+
+.card--feature::before {
+  top: -12px;
+  left: 32px;
+  transform: rotate(-5deg);
+}
+
+.paper::after {
+  top: -13px;
+  left: 50%;
+  margin-left: -46px;
+  transform: rotate(-2deg);
+}
 
 .diary-foot { margin-top: 30px; }
 
