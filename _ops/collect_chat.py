@@ -34,6 +34,10 @@ from pathlib import Path
 
 TZ = timezone(timedelta(hours=8))  # 固定按北京时间聚合，服务器时区是 UTC 也不会错
 
+# 日记任务自己的 headless 会话也写在这个目录里。整份日志只要出现这些标记，
+# 就说明它是日记生成任务，不是聊天——整个跳过，免得「昨天的日记」变成今天的素材。
+DIARY_MARKERS = ("【今天发生的事】", "【今天网上的 ACG 新闻】")
+
 # ── 脱敏 ────────────────────────────────────────────────
 
 RE_EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
@@ -112,6 +116,9 @@ def text_of(content) -> str:
 
 def extract_messages(lines: list[str], since_ms: int) -> list[dict]:
     """把 JSONL 行变成 [{time, role, text}]，只保留人类用户和助手说的话。"""
+    if any(marker in line for line in lines for marker in DIARY_MARKERS):
+        return []  # 这是日记生成任务自己的会话，跳过
+
     msgs: list[dict] = []
     for line in lines:
         line = line.strip()
