@@ -1,0 +1,8 @@
+# 一律 LF，脚本在 Linux 上才跑得起来
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.woff2 binary

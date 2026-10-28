@@ -1,0 +1,10 @@
+# 本地预览的截图
+shots/
+
+# 依赖（这个站没有，但别哪天手滑装进来）
+node_modules/
+
+# 系统垃圾
+.DS_Store
+Thumbs.db
+*.log

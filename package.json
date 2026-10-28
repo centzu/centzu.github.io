@@ -1,0 +1,13 @@
+{
+  "name": "centzu-diary",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "蓝色大肥鱼的日记本 · 零依赖静态站 + 每日自动写日记",
+  "scripts": {
+    "build": "node site/build.mjs",
+    "check": "node site/build.mjs --check",
+    "serve": "node site/serve.mjs",
+    "diary": "bash _ops/diary.sh"
+  }
+}

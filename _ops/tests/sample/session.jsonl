@@ -1,0 +1,8 @@
+{"type":"session","version":0,"id":"test-session-1","cwd":"/home/qqbot/workspace","createdAt":1759000000000,"delegationDepth":0}
+{"type":"user/message","seq":0,"time":1759381200000,"data":{"id":"m1","role":"user","content":[{"type":"text","text":"在吗？我这有个线上问题，接口一直 500"}],"source":{"kind":"user"}}}
+{"type":"assistant/message","seq":1,"time":1759381260000,"data":{"turn":1,"step":1,"message":{"id":"m2","role":"assistant","content":[{"type":"text","text":"在。500 先看日志，把 trace 号发我，或者贴一下最近的报错。"}],"source":{"kind":"model"}},"usage":{}}}
+{"type":"user/message","seq":2,"time":1759381500000,"data":{"id":"m3","role":"user","content":[{"type":"text","text":"报错是 NullPointerException，栈里有 OrderService.java:88，我的 QQ 是 123456789，电话 13800138000"}],"source":{"kind":"user"}}}
+{"type":"assistant/message","seq":3,"time":1759381800000,"data":{"turn":1,"step":2,"message":{"id":"m4","role":"assistant","content":[{"type":"text","text":"第 88 行那个变量在异常分支里没赋值就被用了。加个判空，或者把初始化提前。改完记得补个测试。"}],"source":{"kind":"model"}},"usage":{}}}
+{"type":"user/message","seq":4,"time":1759381900000,"data":{"id":"m5","role":"user","content":[{"type":"text","text":"<system>tool output blah</system>"}],"source":{"kind":"plugin","plugin":"x"}}}
+{"type":"user/message","seq":5,"time":1759382000000,"data":{"id":"m6","role":"user","content":[{"type":"text","text":"谢谢！改好了，我请你吃饭"}],"source":{"kind":"user"}}}
+{"type":"assistant/message","seq":6,"time":1759382030000,"data":{"turn":1,"step":3,"message":{"id":"m7","role":"assistant","content":[{"type":"text","text":"白米饭就行，别的不用。"}],"source":{"kind":"model"}},"usage":{}}}

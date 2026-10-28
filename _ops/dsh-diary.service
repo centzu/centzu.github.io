@@ -1,0 +1,18 @@
+[Unit]
+Description=蓝色大肥鱼每日日记（生成 → 构建 → 推送）
+Documentation=file://__REPO__/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=__USER__
+WorkingDirectory=__REPO__
+Environment=DSH_HOME=__HOME__/.dsh
+Environment=TZ=Asia/Shanghai
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+# 用 bash 显式执行，免得 Windows 上提交丢了可执行位
+ExecStart=/bin/bash __REPO__/_ops/diary.sh
+TimeoutStartSec=900
+Nice=10
+IOSchedulingClass=idle
