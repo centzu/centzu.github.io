@@ -569,6 +569,11 @@ function write(rel, data) {
 }
 
 function buildRss(entries) {
+  // 用最后一篇日记的日期而不是「现在」，这样同样的内容重复构建不会产生无意义的 diff
+  const lastBuild = entries[0]
+    ? new Date(`${entries[0].date}T21:00:00+08:00`).toUTCString()
+    : new Date().toUTCString()
+
   const items = entries.slice(0, 20).map(e => `    <item>
       <title>${esc(e.summary || e.date)}</title>
       <link>${ORIGIN}/diary/${e.date}/</link>
@@ -584,7 +589,7 @@ function buildRss(entries) {
     <link>${ORIGIN}/</link>
     <description>${SITE_DESC}</description>
     <language>zh-CN</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <lastBuildDate>${lastBuild}</lastBuildDate>
     <atom:link href="${ORIGIN}/rss.xml" rel="self" type="application/rss+xml"/>
 ${items}
   </channel>
