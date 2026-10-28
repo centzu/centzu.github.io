@@ -114,7 +114,7 @@ def text_of(content) -> str:
     return "\n".join(parts)
 
 
-def extract_messages(lines: list[str], since_ms: int) -> list[dict]:
+def extract_messages(lines: list[str], since_ms: int, until_ms: int | None = None) -> list[dict]:
     """把 JSONL 行变成 [{time, role, text}]，只保留人类用户和助手说的话。"""
     if any(marker in line for line in lines for marker in DIARY_MARKERS):
         return []  # 这是日记生成任务自己的会话，跳过
@@ -134,8 +134,9 @@ def extract_messages(lines: list[str], since_ms: int) -> list[dict]:
             continue
 
         ts = rec.get("time")
-        if isinstance(ts, (int, float)) and ts < since_ms:
-            continue
+        if isinstance(ts, (int, float)):
+            if ts < since_ms or (until_ms is not None and ts >= until_ms):
+                continue
 
         data = rec.get("data")
         if not isinstance(data, dict):
@@ -216,7 +217,11 @@ def render(msgs: list[dict], max_chars: int) -> str:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--hours", type=float, default=26, help="往回看多少小时（默认 26）")
+    ap.add_argument("--hours", type=float, default=26, help="没有水位线时回看多少小时（默认 26）")
+    ap.add_argument("--since-ms", type=int, default=0,
+                    help="只收这个毫秒时间戳之后的消息（水位线，配合 --hours 上限）")
+    ap.add_argument("--date", default="",
+                    help="只收这个自然日（北京时间 YYYY-MM-DD）的消息，补写用")
     ap.add_argument("--max-chars", type=int, default=6000, help="摘要最大字符数")
     ap.add_argument("--root", default="", help="会话日志根目录，默认 $DSH_HOME/sessions")
     args = ap.parse_args()
@@ -231,17 +236,41 @@ def main() -> int:
         print(f"（没找到会话日志目录 {root}，今天就算没人来吧）。")
         return 0
 
-    since_ms = int((time.time() - args.hours * 3600) * 1000)
+    now_ms = int(time.time() * 1000)
+    until_ms = None
+    if args.date:
+        try:
+            day = datetime.strptime(args.date, "%Y-%m-%d").replace(tzinfo=TZ)
+        except ValueError:
+            print(f"--date 格式不对：{args.date}（要 YYYY-MM-DD）", file=sys.stderr)
+            return 2
+        # 补写某一天：按北京时间的 00:00–24:00 取，和日记日期对齐
+        since_ms = int(day.timestamp() * 1000)
+        until_ms = since_ms + 86_400_000
+    else:
+        if args.since_ms > 0:
+            # 水位线优先，保证不重不漏；只有异常久远（比如几个月没跑）才兜底回看 72 小时
+            floor_ms = now_ms - 72 * 3600 * 1000
+            since_ms = max(floor_ms, args.since_ms)
+            if since_ms > args.since_ms:
+                print("[warn] 水位线超过 72 小时，只回看最近 72 小时", file=sys.stderr)
+        else:
+            since_ms = now_ms - int(args.hours * 3600 * 1000)
+
     # dsh 现在写 session.v4.jsonl.zstd，老版本是 session.jsonl.zstd，两种都要认
-    files = [
-        p for p in root.rglob("session*.jsonl*")
-        if p.is_file() and p.stat().st_mtime * 1000 >= since_ms
-    ]
+    files = []
+    for p in root.rglob("session*.jsonl*"):
+        if not p.is_file():
+            continue
+        # 补写历史日期时，会话文件可能到今天还在写，不能拿 mtime 卡上限
+        if until_ms is None and p.stat().st_mtime * 1000 < since_ms:
+            continue
+        files.append(p)
     files.sort(key=lambda p: p.stat().st_mtime)
 
     all_msgs: list[dict] = []
     for path in files:
-        all_msgs.extend(extract_messages(read_lines(path), since_ms))
+        all_msgs.extend(extract_messages(read_lines(path), since_ms, until_ms))
 
     all_msgs.sort(key=lambda m: m["time"])
     sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]

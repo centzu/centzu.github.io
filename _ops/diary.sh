@@ -21,6 +21,7 @@ cd "$REPO_DIR"
 
 STATE_DIR="${DSH_DIARY_STATE:-$HOME/.dsh-diary}"
 LOG_DIR="$STATE_DIR/logs"
+WATERMARK_FILE="$STATE_DIR/last-collected"
 mkdir -p "$LOG_DIR"
 
 DSH_BIN="${DSH_BIN:-}"
@@ -114,7 +115,19 @@ RAW_TMP="$(mktemp)"
 FEST_TMP="$(mktemp)"
 trap 'rm -f "${CHAT_TMP:-}" "${NEWS_TMP:-}" "${PROMPT_TMP:-}" "${RAW_TMP:-}" "${FEST_TMP:-}" 2>/dev/null || true' EXIT
 
-if ! "$PY" _ops/collect_chat.py --hours 26 >"$CHAT_TMP" 2>>"$LOG"; then
+# 采集窗口：正常日更从上次成功写日记的时间接着收（水位线），补写某天则按自然日
+COLLECT_STARTED_MS="$(date +%s%3N)"
+CHAT_ARGS=(--hours 26)
+if [[ -n "$TARGET_DATE" ]]; then
+  CHAT_ARGS+=(--date "$TARGET_DATE")
+elif [[ -s "$WATERMARK_FILE" ]]; then
+  WM="$(cat "$WATERMARK_FILE" 2>/dev/null || true)"
+  if [[ "$WM" =~ ^[0-9]+$ ]]; then
+    CHAT_ARGS+=(--since-ms "$WM")
+  fi
+fi
+
+if ! "$PY" _ops/collect_chat.py "${CHAT_ARGS[@]}" >"$CHAT_TMP" 2>>"$LOG"; then
   echo "（聊天记录没读出来，今天先不写这个）。" >"$CHAT_TMP"
 fi
 
@@ -274,6 +287,17 @@ if re.search(r"https?://", body):
 if leaks:
     fail("正文里出现" + "、".join(leaks) + "，可能泄露隐私，不发布")
 
+# 私事只写「有人来聊了会儿」这一层：具体话题（钱、病、感情、工作）不进公开正文
+PRIVATE_WORDS = (
+    "房贷", "贷款", "月供", "首付", "公积金", "工资", "薪水", "年终奖",
+    "借钱", "欠款", "生病", "住院", "手术", "抑郁", "分手", "离婚",
+    "裁员", "失业", "彩礼", "房租",
+)
+probe = body + "\n" + " ".join(str(fields.get(k, "")) for k in ("summary", "tags"))
+hit = [w for w in PRIVATE_WORDS if w in probe]
+if hit:
+    fail("正文/摘要写到私事细节（" + "、".join(hit) + "），不发布")
+
 if not fields.get("summary"):
     fields["summary"] = body.replace("\n", " ")[:18]
 if not fields.get("mood"):
@@ -287,6 +311,11 @@ text = "---\n%s\n---\n\n%s\n" % (out_head, body)
 open(entry_path, "w", encoding="utf-8").write(text)
 print("✓ 写入 %s（%d 字）" % (entry_path, body_chars))
 PYEOF
+
+# 素材已经写进日记了，记下这次采集的起点；补写历史日期不动水位线
+if [[ -z "$TARGET_DATE" ]]; then
+  printf '%s\n' "$COLLECT_STARTED_MS" >"$WATERMARK_FILE"
+fi
 
 # ── 5. 构建 + 推送 ────────────────────────────────────────
 if ! node site/build.mjs >>"$LOG" 2>&1; then

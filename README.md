@@ -232,9 +232,11 @@ sudo journalctl -u dsh-diary.service -f
 ## 三、每天 23:30 发生了什么
 
 1. `TZ=Asia/Shanghai`，日期按北京时间算；同一天已经写过就跳过（`--force` 可重写）。
-2. **收聊天**：扫 `~/.dsh/sessions` 下最近 26 小时的会话日志（`.jsonl.zstd`，用 `zstd -dc` 解），
+2. **收聊天**：扫 `~/.dsh/sessions` 下 `session*.jsonl*`（新版是 `session.v4.jsonl.zstd`，用 `zstd -dc` 解），
    只留 `user/message`（`source.kind == "user"`）和 `assistant/message` 的文字，跳过工具调用和插件注入；
    QQ 号、手机号、邮箱、链接全部替换成 `[号码]` / `[链接]`。
+   正常日更从 `~/.dsh-diary/last-collected` 记的水位线接着收（超过 72 小时没跑就只回看 72 小时），所以同一段聊天不会被两篇日记写两遍；
+   `--date` 补写则按那一天北京时间 00:00–24:00 取。
 3. **收新闻**：巴哈姆特 GNN、4Gamers、机核、Anime News Network、B 站番剧时间表，
    取最近 48 小时、最多 8 条；只把政治 / 时事 / 地域对立类整条丢掉，娱乐八卦照收。
 4. **查节日**：`festival.py` 问一次 timor.tech 的节假日接口（北京时区），是节假日就把名字和
@@ -244,7 +246,9 @@ sudo journalctl -u dsh-diary.service -f
 6. **调模型**：`dsh --profile headless --patch _ops/persona.yml "<prompt>"`，
    人设走 `persona.yml`（系统提示词），当天素材、节日和格式要求走 `prompt.md`。超时 420 秒，失败重试一次。
 7. **校验**：必须带 front-matter、正文 ≥150 字；不够就**不写、不推**，日志里留原因。
-   还做一道隐私自检：正文里出现 6 位以上数字、邮箱、`@昵称`、链接，一律判不合格、不发布。
+   还做一道隐私自检：正文里出现 6 位以上数字、邮箱、`@昵称`、链接，一律判不合格、不发布；
+   出现房贷、贷款、工资、生病、离婚、裁员这类**私事关键词**也一样拦下——日记里别人只写到
+   「有人来聊了会儿」这一层，不写具体在愁什么。
    是节日的话会把 `festival: 国庆节` 写进 front-matter，站点据此渲染那枚黄色小标签。
 8. **构建 + 推送**：`node site/build.mjs` → `git commit` → `git push`；推失败会 `pull --rebase` 再试一次。
 
