@@ -867,10 +867,88 @@ pre.code code { background: none; padding: 0; font-size: 0.88em; }
 .pager-next { text-align: right; align-items: flex-end; }
 
 .diary-sign {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
   margin: 0;
   text-align: right;
   font-size: 13px;
   color: var(--ink-3);
+}
+
+.sign-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-strong);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* ── 日记页旁边站着的那只 ──────────────────────────────
+   宽屏时固定在正文右侧的页边距里，跟着滚动一直陪着；
+   窄屏（<1120px）藏起来，正文末尾的头像署名顶上。 */
+
+.companion { display: none; }
+
+@media (min-width: 1240px) {
+  .page-entry .companion {
+    display: block;
+    position: fixed;
+    right: max(16px, calc((100vw - 760px) / 2 - 200px));
+    bottom: 8vh;
+    width: 170px;
+    z-index: 5;
+    cursor: pointer;
+    filter: drop-shadow(0 18px 26px var(--fish-shadow));
+    animation: arrive 0.6s ease both;
+  }
+}
+
+.whale--companion {
+  width: 100%;
+  height: auto;
+  max-height: 46vh;
+  object-fit: contain;
+  object-position: bottom;
+  animation: bob 7s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+.companion-bubble {
+  position: absolute;
+  right: -6px;
+  bottom: calc(100% - 4px);
+  min-width: 92px;
+  max-width: 170px;
+  padding: 8px 11px;
+  background: var(--paper-bg);
+  border: 2px solid var(--line-strong);
+  border-radius: 14px;
+  border-bottom-right-radius: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  box-shadow: 3px 3px 0 var(--shadow-soft);
+  opacity: 0;
+  transform: rotate(2deg) translateY(4px);
+  transform-origin: bottom right;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.companion:hover .companion-bubble,
+.companion:focus-visible .companion-bubble,
+.companion.is-talking .companion-bubble {
+  opacity: 1;
+  transform: rotate(2deg) translateY(0);
+}
+
+@keyframes arrive {
+  from { transform: translateY(18px); }
+  to   { transform: translateY(0); }
 }
 
 /* ── 归档 / 标签 / 页面头 ────────────────────────────── */
@@ -1138,7 +1216,7 @@ pre.code code { background: none; padding: 0; font-size: 0.88em; }
 /* ── 打印 ────────────────────────────────────────────── */
 
 @media print {
-  .sea, .topbar, .foot, .pager, .theme-toggle { display: none !important; }
+  .sea, .topbar, .foot, .pager, .theme-toggle, .companion { display: none !important; }
   body { background: #fff; color: #000; }
   .card, .paper { box-shadow: none; border-color: #ccc; }
 }

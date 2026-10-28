@@ -87,6 +87,37 @@
     fish.setAttribute('aria-label', '戳一下这条鱼')
   }
 
+  // ── 日记页旁边那只 ────────────────────────────────────
+  var companion = document.getElementById('companion')
+  var companionBubble = document.getElementById('companionBubble')
+
+  var talkLines = [
+    '又来看日记啦。',
+    '这页写得还行吧？',
+    '别盯着屏幕太久，眼睛会累。',
+    '看完了记得去吃饭。',
+    '我先在这儿站会儿，不吵你。',
+    '这天的我有点傻，别笑。',
+    '尾鳍都站麻了……',
+    '想往前翻就翻嘛，我不拦。'
+  ]
+  var talkIndex = -1
+  var talkTimer = 0
+
+  if (companion && companionBubble) {
+    companion.addEventListener('click', function () {
+      var i = Math.floor(Math.random() * talkLines.length)
+      if (i === talkIndex) i = (i + 1) % talkLines.length
+      talkIndex = i
+      companionBubble.textContent = talkLines[i]
+      companion.classList.add('is-talking')
+      window.clearTimeout(talkTimer)
+      talkTimer = window.setTimeout(function () {
+        companion.classList.remove('is-talking')
+      }, 3800)
+    })
+  }
+
   // ── 外链 ──────────────────────────────────────────────
   var links = document.querySelectorAll('.paper a[href^="http"]')
   for (var i = 0; i < links.length; i++) {

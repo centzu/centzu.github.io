@@ -223,6 +223,7 @@ const WHALE = {
   chibi: '/assets/img/whale-chibi.webp',
   full: '/assets/img/whale-full.webp',
   avatar: '/assets/img/whale-avatar.webp',
+  companion: '/assets/img/whale-companion.webp',
 }
 
 const whaleImg = (cls, src, alt, w, h, extra = '') =>
@@ -428,9 +429,17 @@ function entryPage(e, entries) {
         ${older ? `<a class="pager-item pager-prev" href="/diary/${older.date}/"><em>← 前一天</em><span>${esc(older.summary || older.date)}</span></a>` : '<span></span>'}
         ${newer ? `<a class="pager-item pager-next" href="/diary/${newer.date}/"><em>后一天 →</em><span>${esc(newer.summary || newer.date)}</span></a>` : '<span></span>'}
       </nav>
-      <p class="diary-sign">—— 写于 ${esc(e.date)}，写完就去吃饭。</p>
+      <p class="diary-sign">
+        ${whaleImg('sign-avatar', WHALE.avatar, '', 240, 240, 'loading="lazy"')}
+        <span>写于 ${esc(e.date)}，写完就去吃饭。</span>
+      </p>
     </footer>
-  </article>`
+  </article>
+
+  <aside class="companion" id="companion" title="戳一下">
+    <div class="companion-bubble" id="companionBubble">又来看日记啦。</div>
+    ${whaleImg('whale--companion', WHALE.companion, '', 720, 1290, 'loading="lazy"')}
+  </aside>`
 
   return layout({
     title: e.summary || `${e.date} 的日记`,
