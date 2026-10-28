@@ -35,6 +35,23 @@ if [[ -z "$DSH_BIN" ]]; then
   fi
 fi
 
+# ── 0. headless 要的 API Key ───────────────────────────────
+# dsh 的 headless profile 会显式关掉 credentials 服务（一次性任务只用「启动环境」
+# 里的凭证），所以 DEEPSEEK_API_KEY 必须出现在进程环境里。systemd 不继承登录
+# shell 的环境变量，这里就从同一个 DSH_HOME 的凭证库（网页 Models 页写的那份）
+# 里补一条；已经有环境变量的（cron、手动跑）原样不动。
+if [[ -z "${DEEPSEEK_API_KEY:-}" ]]; then
+  CRED_FILE="${DSH_HOME:-$HOME/.dsh}/.credentials.yaml"
+  if [[ -r "$CRED_FILE" ]]; then
+    DEEPSEEK_API_KEY="$(sed -n 's/^[[:space:]]*DEEPSEEK_API_KEY:[[:space:]]*//p' "$CRED_FILE" | head -n 1)"
+    DEEPSEEK_API_KEY="${DEEPSEEK_API_KEY%\"}"; DEEPSEEK_API_KEY="${DEEPSEEK_API_KEY#\"}"
+    DEEPSEEK_API_KEY="${DEEPSEEK_API_KEY%\'}"; DEEPSEEK_API_KEY="${DEEPSEEK_API_KEY#\'}"
+    if [[ -n "$DEEPSEEK_API_KEY" ]]; then
+      export DEEPSEEK_API_KEY
+    fi
+  fi
+fi
+
 PY="${PYTHON:-python3}"
 TIMEOUT="${DSH_DIARY_TIMEOUT:-420}"
 
@@ -64,6 +81,9 @@ esac
 
 ENTRY="content/diary/$DATE.md"
 LOG="$LOG_DIR/diary-$DATE.log"
+
+# 全新 clone 里没有 content/（它不进 git），第一次跑先把目录建出来
+mkdir -p "$(dirname "$ENTRY")"
 
 log() {
   local line
@@ -155,6 +175,11 @@ if [[ "$DRY_RUN" -eq 1 ]]; then
 fi
 
 # ── 3. 调模型 ─────────────────────────────────────────────
+if [[ -z "${DEEPSEEK_API_KEY:-}" ]]; then
+  log "! 环境里和 ${CRED_FILE:-$HOME/.dsh/.credentials.yaml} 里都没有 DEEPSEEK_API_KEY"
+  log "! headless 不读交互式凭证库，这样调模型会直接 MISSING_CREDENTIAL"
+fi
+
 run_model() {
   local attempt="$1"
   log "→ 第 $attempt 次调用 dsh（headless，超时 ${TIMEOUT}s）"

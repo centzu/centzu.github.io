@@ -181,6 +181,15 @@ sudo ./_ops/install.sh --time 23:30
 
 ### 6. 手动试一次真跑
 
+> **headless 要的是「启动环境」里的 Key。** `dsh --profile headless` 会显式关掉
+> credentials 服务（一次性任务只用启动环境里的凭证），所以 `DEEPSEEK_API_KEY`
+> 必须出现在进程环境里。`_ops/diary.sh` 启动时先看这个变量，没有就从
+> `$DSH_HOME/.credentials.yaml`（就是网页 Models 页写的那份，权限 600）里读一条
+> export 出去，systemd 下不用额外配置。想换 key：改 `~/.dsh/.credentials.yaml`，
+> 或在 unit 里加 `EnvironmentFile=/etc/dsh/diary.env`（600）。
+>
+> 漏了会报：`dsh: MISSING_CREDENTIAL: llm-deepseek: no API key for provider route "deepseek-official"`
+
 ```bash
 sudo systemctl start dsh-diary.service
 sudo journalctl -u dsh-diary.service -f
