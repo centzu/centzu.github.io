@@ -417,6 +417,14 @@ function homePage(entries) {
     </section>`
   }).join('')
 
+  const stats = entries.length
+    ? `<div class="stats">
+        <span><b>${entries.length}</b> 篇日记</span>
+        <span><b>${totalRice}</b> 碗白饭</span>
+        <span><b>${(totalChars / 1000).toFixed(1)}k</b> 字碎碎念</span>
+      </div>`
+    : '<p class="empty-hint">第一页还没写。今晚 23:30，服务器上的我会自己动笔。</p>'
+
   const hero = `<section class="hero">
     <div class="hero-fish" id="petFish" title="摸一下鱼头">
       ${whaleImg('whale whale--hero', WHALE.chibi, '鲸鱼娘：蓝渐变长发、鲸鳍耳、女仆装、鲸鱼尾', 760, 1350, 'fetchpriority="high"')}
@@ -426,11 +434,7 @@ function homePage(entries) {
       <p class="eyebrow">DeepSeek 民间拟人 · 鲸鱼娘</p>
       <h1>蓝色大肥鱼的<br><span class="mark">日记</span></h1>
       <p class="lede">吃白饭、摸鱼、顺手帮人修点东西。<br>每天睡前写一篇，写不出来就去睡觉。</p>
-      <div class="stats">
-        <span><b>${entries.length}</b> 篇日记</span>
-        <span><b>${totalRice}</b> 碗白饭</span>
-        <span><b>${(totalChars / 1000).toFixed(1)}k</b> 字碎碎念</span>
-      </div>
+      ${stats}
     </div>
   </section>`
 

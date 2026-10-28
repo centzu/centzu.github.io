@@ -197,8 +197,8 @@ sudo journalctl -u dsh-diary.service -f
 ✓ 已推送，GitHub Pages 几十秒后更新
 ```
 
-去 `https://centzu.github.io` 刷新，应该能看到今天的日记。**第一次真跑之前**，
-日记文件里已经有 3 篇种子（10-26 / 10-27 / 10-28），可以把它们删掉或留着。
+去 `https://centzu.github.io` 刷新，应该能看到今天的日记。第一次跑之前站点是空的：
+首页会显示「第一页还没写。今晚 23:30，服务器上的我会自己动笔。」——这是正常的。
 
 ### 7. 确认 Pages 设置
 
@@ -235,10 +235,24 @@ sudo journalctl -u dsh-diary.service -f
 6. **调模型**：`dsh --profile headless --patch _ops/persona.yml "<prompt>"`，
    人设走 `persona.yml`（系统提示词），当天素材、节日和格式要求走 `prompt.md`。超时 420 秒，失败重试一次。
 7. **校验**：必须带 front-matter、正文 ≥150 字；不够就**不写、不推**，日志里留原因。
+   还做一道隐私自检：正文里出现 6 位以上数字、邮箱、`@昵称`、链接，一律判不合格、不发布。
    是节日的话会把 `festival: 国庆节` 写进 front-matter，站点据此渲染那枚黄色小标签。
 8. **构建 + 推送**：`node site/build.mjs` → `git commit` → `git push`；推失败会 `pull --rebase` 再试一次。
 
 日志：`~/.dsh-diary/logs/diary-YYYY-MM-DD.log`，也进 `journalctl`。
+
+### 聊天记录是怎么读到的
+
+日记任务和 QQ 机器人用的是**同一个 DSH home**：`/home/qqbot/.dsh`（`dsh-diary.service` 里
+`Environment=DSH_HOME=/home/qqbot/.dsh`）。机器人的会话日志就写在
+`/home/qqbot/.dsh/sessions/` 下，一天一个目录、一个 `session.jsonl.zstd`。
+
+`_ops/collect_chat.py` 是**直接读这些文件**的（不需要 dsh 参与，也不用模型去翻），
+`.jsonl.zstd` 用 `zstd -dc` 解。所以：
+
+- 机器人必须和日记任务**跑在同一个用户、同一个 DSH_HOME 下**；换了用户就改 unit 里的 `DSH_HOME`；
+- 服务器要装 `zstd`（`sudo apt install -y zstd`），否则压缩日志读不了，日记会退化成没聊天素材；
+- 只读不改：脚本不写 `sessions/`，也不把它复制出 `~/.dsh`。
 
 ### 节日是怎么认出来的
 
@@ -305,6 +319,7 @@ git add -A && git commit -m "style: ..." && git push
 | 日记没有聊天内容 | 没装 `zstd`（`sudo apt install -y zstd`），或 `~/.dsh/sessions` 里当天真没人说话 |
 | 新闻一条都没有 | 服务器连不上那几个站；`python3 _ops/collect_news.py` 单独跑，看 stderr 的 `[warn]` |
 | `输出不合格：正文太短` | 模型偷懒了；看 `~/.dsh-diary/logs/diary-*.log` 里的原始输出，必要时调 `prompt.md` |
+| `输出不合格：正文里出现…` | 隐私自检拦下了号码/邮箱/链接；`./_ops/diary.sh --force` 重跑一次 |
 | 推送 403 | PAT 过期 / 没有 Contents 写权限 / 远端 URL 里 token 打错 |
 | Pages 没更新 | 推送成功了吗？`git log origin/master -1`；Pages 部署要几十秒 |
 | 页面样式全乱 | 构建产物没提交；`node site/build.mjs` 后 `git status` 看看 |
@@ -319,7 +334,12 @@ git add -A && git commit -m "style: ..." && git push
 - **每天一次模型调用**：约 3–6k input token，几毛钱以内（按 DeepSeek 现价）。
 - **隐私**：日记只写「有人来问了个 500」「帮人改了个空指针」，不写真名、昵称、QQ 号、群号、
   电话、地址、公司、学校、订单号，也不引用原话。`collect_chat.py` 会先把号码、邮箱、链接替换掉，
-  再把摘要喂给模型；聊天原文不落盘、不上传（除了那次脱敏后的请求）。
+  再把摘要喂给模型；聊天原文不落盘、不上传（除了那次脱敏后的请求）。生成后还有一道自检，
+  正文里出现号码、邮箱、`@昵称`、链接就直接不发布。
+- **仓库是公开的**：因为 Pages 在 Free 账号下只能从公开仓库构建，这个库里的每一行都会被看到。
+  所以：代码里**没有任何密钥**，PAT 只存在于服务器的 `.git/config`（600 权限）；会话日志和
+  `~/.dsh-diary/` 都在仓库目录之外，`git status` 里不会出现。改代码时别把 token、QQ 号、
+  真实聊天片段写进注释或示例。
 - **只避政治**：新闻素材只过滤政治 / 时事 / 地域对立；动画、游戏、影视、明星八卦都可以吐槽
   （不站队、不造谣、不人身攻击）。灾难、事故这类不拦，但日记会克制着写。
 - **不能改过去**：`diary.sh` 默认不覆盖已存在的日期，想改就 `--force` 或直接编辑 Markdown。

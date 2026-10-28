@@ -236,6 +236,19 @@ if body_chars < 150:
 if body_chars > 2000:
     body = body[:2000]
 
+# 发布前自检：正文是公开的，出现这些就说明脱敏没兜住
+leaks = []
+if re.search(r"\d{6,}", body):
+    leaks.append("6 位以上数字")
+if re.search(r"[\w.+-]+@[\w-]+\.[\w.]+", body):
+    leaks.append("邮箱")
+if re.search(r"@\S+", body):
+    leaks.append("@昵称")
+if re.search(r"https?://", body):
+    leaks.append("链接")
+if leaks:
+    fail("正文里出现" + "、".join(leaks) + "，可能泄露隐私，不发布")
+
 if not fields.get("summary"):
     fields["summary"] = body.replace("\n", " ")[:18]
 if not fields.get("mood"):
