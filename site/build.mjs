@@ -438,7 +438,7 @@ function entryPage(e, entries) {
 
   <aside class="companion" id="companion" title="戳一下">
     <div class="companion-bubble" id="companionBubble">又来看日记啦。</div>
-    ${whaleImg('whale--companion', WHALE.companion, '', 720, 1290, 'loading="lazy"')}
+    ${whaleImg('whale--companion', WHALE.companion, '', 760, 1350, 'loading="lazy"')}
   </aside>`
 
   return layout({

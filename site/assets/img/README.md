@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | `whale-chibi.webp` | 首页 / 404 / 页脚 | `character-art/v1/…/deepseek-chibi.webp` |
 | `whale-full.webp` | 「关于」页 | `character-art/v1/…/deepseek-full.webp` |
-| `whale-companion.webp` | 日记页旁边那只（镜像） | `whale-full.webp` 水平翻转 |
+| `whale-companion.webp` | 日记页旁边那只（Q 版镜像） | `whale-chibi.webp` 水平翻转 |
 | `whale-avatar.webp`、`favicon.png`、`apple-touch-icon.png` | 顶栏头像、站点图标 | 由 `whale-chibi.webp` 按比例裁头 |
 
 ## 授权
