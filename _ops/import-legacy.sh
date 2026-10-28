@@ -24,6 +24,21 @@ if ! git clone --depth 1 "$OLD_URL" "$TMP_DIR/old" 2>/dev/null; then
   exit 1
 fi
 
+# force push 之后默认分支已经是新站了，别把新站当旧站搬进去
+if [[ -f "$TMP_DIR/old/site/build.mjs" ]]; then
+  cat >&2 <<'EOF'
+✗ 克隆到的是「新站」，不是 2015–2018 的旧站。
+
+  说明你（或别人）已经把远程默认分支换成新站了，旧站不在分支上。
+  旧的对象多半还在 GitHub 上，可以按根树 SHA 直接恢复：
+
+      python3 _ops/recover-legacy.py --token <你的 PAT>
+
+  跑完再 node site/build.mjs 并提交即可。
+EOF
+  exit 1
+fi
+
 say "复制到 legacy/"
 rm -rf "$REPO_DIR/legacy"
 mkdir -p "$REPO_DIR/legacy"

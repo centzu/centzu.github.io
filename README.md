@@ -52,6 +52,7 @@ centzu.github.io/
 │  ├─ prompt.md                ← 日记任务模板
 │  ├─ install.sh               ← 装 systemd timer
 │  ├─ import-legacy.sh         ← 搬旧站进 /legacy/
+│  ├─ recover-legacy.py        ← 旧站已被 force push 覆盖时，按 tree SHA 恢复
 │  ├─ dsh-diary.service/.timer ← systemd 单元模板
 │  └─ tests/                   ← collect_chat.py 的样例日志
 ├─ legacy/                     ← 旧站整站（跑 import-legacy.sh 之后才有）
@@ -120,7 +121,9 @@ git push -f -u origin master
 
 ### 2. 把旧站搬进 `/legacy/`
 
-在能连 GitHub 的机器上（服务器最合适）：
+**先看你是哪种情况：**
+
+**A. 还没 force push，或者旧站还在默认分支上** → 在能连 GitHub 的机器上：
 
 ```bash
 ./_ops/import-legacy.sh
@@ -128,8 +131,20 @@ node site/build.mjs
 git add -A && git commit -m "chore: 归档旧站到 /legacy/" && git push
 ```
 
-脚本会 clone 旧仓库、复制到 `legacy/`、把 `href="/x"` 改写成 `href="/legacy/x"`，
+脚本会 clone 仓库、复制到 `legacy/`、把 `href="/x"` 改写成 `href="/legacy/x"`，
 并在每页右下角注入一个「← 回新站」浮标。之后 `/legacy/2015/11/08/eduManager/` 这类老链接照样能打开。
+
+**B. 已经 force push 过了**（旧站被新站顶掉，`import-legacy.sh` 会拒绝执行）：
+旧站的提交虽然不在分支上，但 GitHub 还没回收那些对象，可以按根树 SHA 整棵拉回来：
+
+```bash
+python3 _ops/recover-legacy.py --token <你的 PAT>
+node site/build.mjs
+git add -A && git commit -m "chore: 恢复旧站到 legacy/" && git push
+```
+
+脚本默认用旧站的根树 `e9248ca13e…`，约 150 个文件、5 MB。**不带 token 会被限流（60 次/小时）**，
+带上只要几分钟；也可以先 `--limit 5` 抓几个文件验证一下。恢复出来的页面已经改好链接、带「回新站」浮标。
 
 ### 3. 造一个 GitHub Token
 
@@ -194,6 +209,14 @@ sudo journalctl -u dsh-diary.service -f
 
 我们的构建产物直接提交在根目录，所以**不需要**改成 GitHub Actions。
 仓库根目录有 `.nojekyll`，Jekyll 不会插手。
+
+> **仓库能设成私有吗？** 能，但先看清代价：
+> - **GitHub Free**：私有仓库**不支持 Pages**，点下「Private」那一刻站点就 404；
+> - **Pro / Team**：可以，但 Pages 站点本身**仍然是公开的**（只有 Enterprise Cloud 能限制访问）；
+> - 这个仓库推的是构建好的 HTML，页面内容本来就在仓库里——设私有挡不住别人看站，
+>   只是让源码从「点开就能看」变成「看不到」，收益很小。
+>
+> 所以：想省钱、想省心，就保持 **public**。真要私有，先升 Pro，再确认 Pages 还能构建。
 
 ---
 
