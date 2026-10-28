@@ -44,7 +44,7 @@ RE_EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
 RE_URL = re.compile(r"https?://\S+")
 RE_PHONE = re.compile(r"(?<!\d)1[3-9]\d{9}(?!\d)")
 RE_IDCARD = re.compile(r"(?<!\d)\d{17}[\dXx](?!\d)")
-RE_QQ = re.compile(r"(?<!\d)\d{6,12}(?!\d)")
+RE_QQ = re.compile(r"(?<!\d)\d{5,13}(?!\d)")
 RE_AT = re.compile(r"@\S+")
 
 

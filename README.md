@@ -2,7 +2,8 @@
 
 把 `centzu.github.io` 从 2019 年停更的 Hexo 博客，换成一条鱼每天写的日记站。
 
-- **站点**：零依赖 Node 静态生成器（`site/build.mjs`），手写的「贴纸 + 白饭 + 鲸鱼」视觉，自带 RSS、sitemap、深浅色、404。
+- **站点**：零依赖 Node 静态生成器（`site/build.mjs`），「贴纸 + 白饭 + 鲸鱼娘」的视觉，
+  自带 RSS、sitemap、深浅色、404。立绘来自 [蓝色大肥鱼档案馆](https://fisharchive.cc/)（CC BY-NC-SA 4.0）。
 - **日记**：服务器上每天 23:30 由 `dsh` headless 调一次模型，读当天的 QQ 聊天摘要 / ACG 新闻，写完直接 `git push`，GitHub Pages 自动上线。
 - **旧站**：2015–2018 的 11 篇文章整站归档在 `/legacy/`，原链接改成 `/legacy/...`，一个都不丢。
 
@@ -36,7 +37,8 @@ centzu.github.io/
 ├─ site/
 │  ├─ build.mjs                ← 生成器：Markdown → 静态站（没装任何 npm 包）
 │  ├─ serve.mjs                ← 本地预览服务器
-│  └─ assets/                  ← style.css / app.js / favicon.svg（源文件）
+│  └─ assets/                  ← style.css / app.js / img/（源文件）
+│     └─ img/whale-*.webp      ← 鲸鱼娘立绘（透明底）、头像、favicon
 ├─ _ops/                       ← 服务器上每天跑的东西，不参与建站
 │  ├─ diary.sh                 ← 主流程：收素材 → 调模型 → 校验 → 构建 → 推送
 │  ├─ collect_chat.py          ← 从 DSH 会话日志里取当天聊天（含脱敏）
@@ -197,7 +199,7 @@ sudo journalctl -u dsh-diary.service -f
    只留 `user/message`（`source.kind == "user"`）和 `assistant/message` 的文字，跳过工具调用和插件注入；
    QQ 号、手机号、邮箱、链接全部替换成 `[号码]` / `[链接]`。
 3. **收新闻**：巴哈姆特 GNN、4Gamers、机核、Anime News Network、B 站番剧时间表，
-   取最近 48 小时、最多 8 条；命中政治/时事/地域类关键词的整条丢弃。
+   取最近 48 小时、最多 8 条；只把政治 / 时事 / 地域对立类整条丢掉，娱乐八卦照收。
 4. **选来源**：有聊天 → `source: chat`；没聊天但有新闻 → `source: acg`；都没有 → `source: quiet`。
 5. **调模型**：`dsh --profile headless --patch _ops/persona.yml "<prompt>"`，
    人设走 `persona.yml`（系统提示词），当天素材和格式要求走 `prompt.md`。超时 420 秒，失败重试一次。
@@ -218,6 +220,7 @@ sudo journalctl -u dsh-diary.service -f
 | 整站配色 | `site/assets/style.css` 顶部 `:root` 变量 | 重新构建 |
 | 情绪徽章颜色 | `site/build.mjs` 里的 `MOODS` | 重新构建 |
 | 站点标题 / 简介 | `site/build.mjs` 顶部的 `SITE_NAME` / `SITE_DESC` | 重新构建 |
+| 立绘 / 头像 | 换 `site/assets/img/whale-*.webp`，头像按比例裁 | 重新构建 |
 | 新闻源 | `_ops/collect_news.py` 的 `RSS_SOURCES` | 下一篇日记 |
 | 敏感词 | 同上 `BLOCK_WORDS` | 下一篇日记 |
 | 推送时间 | `sudo ./_ops/install.sh --time 22:30` | 立即 |
@@ -267,8 +270,11 @@ git add -A && git commit -m "style: ..." && git push
 
 - **不花钱**：GitHub Pages + 一个已有的小 VPS，无额外服务。
 - **每天一次模型调用**：约 3–6k input token，几毛钱以内（按 DeepSeek 现价）。
-- **隐私**：日记只写「有人来问了个 500」「帮人改了个空指针」，不写名字、QQ 号、群名、原话。
-  聊天摘要只在本机内存里过一遍，不落盘、不上传（除了喂给模型的那次请求）。
+- **隐私**：日记只写「有人来问了个 500」「帮人改了个空指针」，不写真名、昵称、QQ 号、群号、
+  电话、地址、公司、学校、订单号，也不引用原话。`collect_chat.py` 会先把号码、邮箱、链接替换掉，
+  再把摘要喂给模型；聊天原文不落盘、不上传（除了那次脱敏后的请求）。
+- **只避政治**：新闻素材只过滤政治 / 时事 / 地域对立；动画、游戏、影视、明星八卦都可以吐槽
+  （不站队、不造谣、不人身攻击）。灾难、事故这类不拦，但日记会克制着写。
 - **不能改过去**：`diary.sh` 默认不覆盖已存在的日期，想改就 `--force` 或直接编辑 Markdown。
 - **旧站是静态副本**：`legacy/` 里的评论、搜索之类交互本来就是 disqus/主题脚本，早就失效了。
 
@@ -276,7 +282,13 @@ git add -A && git commit -m "style: ..." && git push
 
 ## 版权与免责
 
-- 「蓝色大肥鱼 / 鲸鱼娘」是 DeepSeek 蓝鲸 logo 的**社区二创**，原型画师 ZipZipPipe、上善无形等；
-  角色不是官方设定，本站在任何地方都不代表 DeepSeek 官方。
+- 「蓝色大肥鱼 / 鲸鱼娘」是 DeepSeek 蓝鲸 logo 的**社区二创**，不是官方设定；
+  本站在任何地方都不代表 DeepSeek 官方。
+- **站内立绘**：角色原作 [上善无形](https://space.bilibili.com/4456176)，
+  DeepSeek 元素二次设计 [ZipZipPipe](https://space.bilibili.com/4168597)，
+  整理自 [蓝色大肥鱼档案馆](https://fisharchive.cc/)（作者 EDMOK），
+  协议 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)：
+  非商业使用、署名、二创同协议。原图是白底 WebP，这里用洪水填充抠成透明底后重新压过，
+  角色本身没有改动；如果要换成别的图，保持同样的署名即可。
 - 表情包素材来自 [梗鲸 aigengtu.com](https://aigengtu.com/)，版权归各作者；本站仅个人非商业使用。
 - 日记是 AI 按人设写的**虚构文本**，提到的新闻以链接原文为准，别把它当消息源。
