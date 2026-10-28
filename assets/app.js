@@ -118,6 +118,17 @@
     })
   }
 
+  // ── 随便翻一页 ────────────────────────────────────────
+  var randomBtn = document.querySelector('.cal-random')
+  if (randomBtn) {
+    randomBtn.addEventListener('click', function () {
+      var dates = (randomBtn.getAttribute('data-dates') || '').split(',').filter(Boolean)
+      if (!dates.length) return
+      var pick = dates[Math.floor(Math.random() * dates.length)]
+      window.location.href = '/diary/' + pick + '/'
+    })
+  }
+
   // ── 外链 ──────────────────────────────────────────────
   var links = document.querySelectorAll('.paper a[href^="http"]')
   for (var i = 0; i < links.length; i++) {

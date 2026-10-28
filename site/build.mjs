@@ -235,6 +235,56 @@ const whaleImg = (cls, src, alt, w, h, extra = '') =>
 
 const RICE = n => Array.from({ length: Math.max(0, Math.min(5, n)) }, () => '<span class="bowl" aria-hidden="true"></span>').join('')
 
+/** 左边那条竖着的书签。纯装饰，宽屏才出现。 */
+function sideLeftRail() {
+  return `<aside class="rail rail--left" aria-hidden="true">
+    ${whaleImg('rail-avatar', WHALE.avatar, '', 240, 240, 'loading="lazy"')}
+    <span class="rail-dash"></span>
+    <p class="rail-title">蓝色大肥鱼的日记</p>
+    <span class="rail-dash"></span>
+    <span class="rail-bubble"></span>
+    <span class="rail-bubble rail-bubble--sm"></span>
+    <span class="rail-caption">DAILY DIARY</span>
+  </aside>`
+}
+
+/** 右边这枚小日历：最近写日记那个月，写过的那天可以点进去。 */
+function sideCalendar(entries) {
+  if (!entries.length) return ''
+  const latest = entries[0].date
+  const [year, month] = latest.split('-').map(Number)
+  const written = new Set(entries.map(e => e.date))
+  const first = new Date(Date.UTC(year, month - 1, 1))
+  const pad = (first.getUTCDay() + 6) % 7 // 周一开头
+  const days = new Date(Date.UTC(year, month, 0)).getUTCDate()
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' }).format(new Date())
+  const monthPrefix = `${year}-${String(month).padStart(2, '0')}`
+
+  const cells = []
+  for (let i = 0; i < pad; i++) cells.push('<span class="cal-day is-blank"></span>')
+  for (let day = 1; day <= days; day++) {
+    const iso = `${monthPrefix}-${String(day).padStart(2, '0')}`
+    const cls = `cal-day${written.has(iso) ? ' is-written' : ''}${iso === today ? ' is-today' : ''}`
+    cells.push(written.has(iso)
+      ? `<a class="${cls}" href="/diary/${iso}/" title="${esc(iso)} 的日记">${day}</a>`
+      : `<span class="${cls}">${day}</span>`)
+  }
+
+  const monthCount = entries.filter(e => e.date.startsWith(monthPrefix)).length
+
+  return `<aside class="rail rail--right" aria-label="这个月写过哪几天">
+    <div class="cal">
+      <div class="cal-head"><b>${year} 年 ${month} 月</b><em>${monthCount} 篇</em></div>
+      <div class="cal-week"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+      <div class="cal-grid">${cells.join('')}</div>
+      <div class="cal-foot">
+        <a href="/archive/">全部 ${entries.length} 篇 →</a>
+        <button class="cal-random" type="button" data-dates="${entries.map(e => e.date).join(',')}">随便翻一页</button>
+      </div>
+    </div>
+  </aside>`
+}
+
 function moodChip(mood) {
   if (!mood) return ''
   const tone = MOODS[mood] || 'blue'
@@ -278,6 +328,9 @@ function layout({ title, description = SITE_DESC, path = '/', bodyClass = '', co
 </head>
 <body class="${bodyClass}">
 <div class="sea" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+
+${sideLeftRail()}
+${bodyClass === 'page-entry' ? '' : sideCalendar(latest)}
 
 <header class="topbar">
   <a class="brand" href="/" aria-label="回到首页">

@@ -5,8 +5,10 @@
 - **站点**：零依赖 Node 静态生成器（`site/build.mjs`），「贴纸 + 白饭 + 鲸鱼娘」的视觉，
   自带 RSS、sitemap、深浅色、404。立绘来自 [蓝色大肥鱼档案馆](https://fisharchive.cc/)（CC BY-NC-SA 4.0）。
 - **日记**：服务器上每天 23:30 由 `dsh` headless 调一次模型，读当天的 QQ 聊天摘要 / ACG 新闻，写完直接 `git push`，GitHub Pages 自动上线。
-- **日记页**：宽屏（≥1240px）上她会站在正文右侧的页边距里，滚动时一直陪着，戳一下会说话；
+- **日记页**：宽屏（≥1180px）上她会站在正文右侧的页边距里，滚动时一直陪着，戳一下会说话；
   窄屏放不下，就在文末用头像署名——不挡正文。
+- **两侧页边距**：宽屏时左边是一枚竖着的书签（头像 + 站名 + 小气泡），右边是这个月的小日历——
+  写过日记的日子点得进去，今天有描边，底下还有「随便翻一页」随机跳转。
 - **旧站**：2015–2018 的 11 篇文章整站归档在 `/legacy/`，原链接改成 `/legacy/...`，一个都不丢。
 
 ```
@@ -239,7 +241,8 @@ sudo journalctl -u dsh-diary.service -f
 | 情绪徽章颜色 | `site/build.mjs` 里的 `MOODS` | 重新构建 |
 | 站点标题 / 简介 | `site/build.mjs` 顶部的 `SITE_NAME` / `SITE_DESC` | 重新构建 |
 | 立绘 / 头像 | 换 `site/assets/img/whale-*.webp`，头像按比例裁 | 重新构建 |
-| 日记页旁边那只 | `site/build.mjs` 的 `entryPage` + `style.css` 的 `.companion`（≥1240px 才显示） | 重新构建 |
+| 日记页旁边那只 | `site/build.mjs` 的 `entryPage` + `style.css` 的 `.companion`（≥1180px 才显示） | 重新构建 |
+| 两侧书签 / 小日历 | `site/build.mjs` 的 `sideLeftRail` / `sideCalendar` + `.rail` 媒体查询 | 重新构建 |
 | 新闻源 | `_ops/collect_news.py` 的 `RSS_SOURCES` | 下一篇日记 |
 | 节日的感想角度 | `_ops/festival.py` 的 `HINTS` | 下一篇日记 |
 | 关掉节日功能 | 删掉 `_ops/diary.sh` 里调 `festival.py` 那三行 | 下一篇日记 |

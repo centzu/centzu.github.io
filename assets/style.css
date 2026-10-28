@@ -1015,7 +1015,7 @@ pre.code code { background: none; padding: 0; font-size: 0.88em; }
 
 .companion { display: none; }
 
-@media (min-width: 1240px) {
+@media (min-width: 1180px) {
   .page-entry .companion {
     display: block;
     position: fixed;
@@ -1283,6 +1283,193 @@ pre.code code { background: none; padding: 0; font-size: 0.88em; }
 .foot-meta a:hover { color: var(--brand); }
 .dot { opacity: 0.5; }
 
+/* ── 两侧的小物件 ──────────────────────────────────────
+   宽屏时把左右页边距用起来：左边一枚竖书签，右边这个月的小日历。
+   窄屏（<1240px）全部收起来，不挤正文。 */
+
+.rail { display: none; }
+
+@media (min-width: 1180px) {
+  .rail { position: fixed; z-index: 4; }
+
+  .rail--left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    left: max(12px, calc((100vw - 760px) / 2 - 170px));
+    width: 150px;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .rail--right {
+    display: block;
+    top: 128px;
+    right: max(12px, calc((100vw - 760px) / 2 - 198px));
+    width: 180px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .rail--left { left: max(20px, calc((100vw - 760px) / 2 - 170px)); }
+
+  .rail--right {
+    right: max(20px, calc((100vw - 760px) / 2 - 220px));
+    width: 200px;
+  }
+}
+
+.rail-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid var(--line-strong);
+  box-shadow: 0 3px 0 var(--shadow-soft);
+}
+
+.rail-dash {
+  width: 0;
+  height: 24px;
+  border-left: 2px dashed var(--line-strong);
+  opacity: 0.9;
+}
+
+.rail-title {
+  margin: 0;
+  writing-mode: vertical-rl;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: var(--ink-3);
+}
+
+.rail-bubble {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--brand);
+  border-radius: 50%;
+  opacity: 0.28;
+}
+
+.rail-bubble--sm { width: 6px; height: 6px; opacity: 0.2; }
+
+.rail-caption {
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+  opacity: 0.65;
+}
+
+.cal {
+  padding: 14px 13px 12px;
+  background: var(--paper-bg);
+  border: 2px solid var(--line-strong);
+  border-radius: 18px;
+  box-shadow: 4px 4px 0 var(--shadow-soft);
+}
+
+.cal-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 9px;
+}
+
+.cal-head b { font-size: 13px; font-weight: 800; }
+
+.cal-head em {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
+.cal-week,
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.cal-week span {
+  text-align: center;
+  font-size: 9.5px;
+  color: var(--ink-3);
+  padding-bottom: 2px;
+}
+
+.cal-day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 7px;
+  font-size: 11px;
+  color: var(--ink-3);
+  text-decoration: none;
+}
+
+.cal-day.is-written {
+  background: var(--brand-soft);
+  color: var(--brand-2);
+  font-weight: 800;
+}
+
+.cal-day.is-written::after {
+  content: "";
+  position: absolute;
+  bottom: 2.5px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--pink);
+}
+
+.cal-day.is-written:hover { background: var(--brand); color: #fff; }
+.cal-day.is-written:hover::after { background: #fff; }
+
+.cal-day.is-today {
+  outline: 2px solid var(--brand);
+  outline-offset: -2px;
+}
+
+.cal-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+}
+
+.cal-foot a {
+  font-size: 11.5px;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.cal-foot a:hover { color: var(--brand-2); }
+
+.cal-random {
+  padding: 5px 10px;
+  font: inherit;
+  font-size: 11.5px;
+  color: var(--ink-2);
+  background: var(--rice);
+  border: 1.5px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, transform 0.15s;
+}
+
+.cal-random:hover {
+  color: var(--brand-2);
+  border-color: var(--brand);
+  transform: rotate(-1.5deg);
+}
+
 /* ── 响应式 ──────────────────────────────────────────── */
 
 @media (max-width: 720px) {
@@ -1339,7 +1526,7 @@ pre.code code { background: none; padding: 0; font-size: 0.88em; }
 /* ── 打印 ────────────────────────────────────────────── */
 
 @media print {
-  .sea, .topbar, .foot, .pager, .theme-toggle, .companion { display: none !important; }
+  .sea, .topbar, .foot, .pager, .theme-toggle, .companion, .rail { display: none !important; }
   body { background: #fff; color: #000; }
   .card, .paper { box-shadow: none; border-color: #ccc; }
 }
