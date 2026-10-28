@@ -232,8 +232,9 @@ def main() -> int:
         return 0
 
     since_ms = int((time.time() - args.hours * 3600) * 1000)
+    # dsh 现在写 session.v4.jsonl.zstd，老版本是 session.jsonl.zstd，两种都要认
     files = [
-        p for p in root.rglob("session.jsonl*")
+        p for p in root.rglob("session*.jsonl*")
         if p.is_file() and p.stat().st_mtime * 1000 >= since_ms
     ]
     files.sort(key=lambda p: p.stat().st_mtime)
