@@ -231,7 +231,7 @@ sudo journalctl -u dsh-diary.service -f
 
 ## 三、每天 23:30 发生了什么
 
-1. `TZ=Asia/Shanghai`，日期按北京时间算；同一天已经写过就跳过（`--force` 可重写）。
+1. `TZ=Asia/Shanghai`，日期按北京时间算；同一天已经写过就跳过（`--force` 可重写，重写会按自然日重取当天素材）。
 2. **收聊天**：扫 `~/.dsh/sessions` 下 `session*.jsonl*`（新版是 `session.v4.jsonl.zstd`，用 `zstd -dc` 解），
    只留 `user/message`（`source.kind == "user"`）和 `assistant/message` 的文字，跳过工具调用和插件注入；
    QQ 号、手机号、邮箱、链接全部替换成 `[号码]` / `[链接]`。
