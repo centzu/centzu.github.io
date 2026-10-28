@@ -120,6 +120,9 @@ COLLECT_STARTED_MS="$(date +%s%3N)"
 CHAT_ARGS=(--hours 26)
 if [[ -n "$TARGET_DATE" ]]; then
   CHAT_ARGS+=(--date "$TARGET_DATE")
+elif [[ "$FORCE" -eq 1 ]]; then
+  # 重写今天：按自然日重取整天素材，别只拿水位线之后那几条
+  CHAT_ARGS+=(--date "$DATE")
 elif [[ -s "$WATERMARK_FILE" ]]; then
   WM="$(cat "$WATERMARK_FILE" 2>/dev/null || true)"
   if [[ "$WM" =~ ^[0-9]+$ ]]; then
