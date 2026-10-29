@@ -14,8 +14,8 @@
 
   今天有 2 位朋友来找我，一共 37 条消息。
 
-  [10:12] 对方: 在吗
-  [10:12] 我: 在。
+  [10-30 10:12] 对方: 在吗
+  [10-30 10:12] 我: 在。
 
 如果今天没人说话，输出「（今天没人来找我）。」
 """
@@ -190,7 +190,7 @@ def render(msgs: list[dict], max_chars: int) -> str:
         return "（今天没人来找我）。"
 
     def fmt(m: dict) -> str:
-        when = datetime.fromtimestamp(m["time"] / 1000, TZ).strftime("%H:%M") if m["time"] else "??:??"
+        when = datetime.fromtimestamp(m["time"] / 1000, TZ).strftime("%m-%d %H:%M") if m["time"] else "??:??"
         return f"[{when}] {m['role']}: {m['text']}"
 
     lines = [fmt(m) for m in cleaned]
@@ -211,7 +211,7 @@ def render(msgs: list[dict], max_chars: int) -> str:
 
     hours = {m["time"] // 3_600_000 for m in cleaned if m["time"]}
     span = f"，分布在 {len(hours)} 个时段" if hours else ""
-    header = f"今天断断续续有 {len(cleaned)} 条消息{span}。"
+    header = f"这段时间断断续续有 {len(cleaned)} 条消息{span}（行首是月-日 时:分）。"
     return header + "\n\n" + "\n".join(body)
 
 
