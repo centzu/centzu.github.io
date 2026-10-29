@@ -263,10 +263,21 @@ def main() -> int:
     ap.add_argument("--hours", type=float, default=48)
     ap.add_argument("--limit", type=int, default=10)
     ap.add_argument("--timeout", type=float, default=10)
+    ap.add_argument("--date", default="", help="只取这一天的新闻（北京时间 YYYY-MM-DD），补写用")
     args = ap.parse_args()
 
     now = datetime.now(timezone.utc)
-    since = now - timedelta(hours=args.hours)
+    until = None
+    if args.date:
+        try:
+            day = datetime.strptime(args.date, "%Y-%m-%d").replace(tzinfo=TZ)
+        except ValueError:
+            print(f"--date 格式不对：{args.date}（要 YYYY-MM-DD）", file=sys.stderr)
+            return 2
+        since = day.astimezone(timezone.utc)
+        until = (day + timedelta(days=1)).astimezone(timezone.utc)
+    else:
+        since = now - timedelta(hours=args.hours)
 
     def load(src: tuple[str, str, str, int]) -> list[dict]:
         name, url, category, weight = src
@@ -281,10 +292,16 @@ def main() -> int:
         for batch in pool.map(load, RSS_SOURCES):
             items.extend(batch)
 
-    for it in bilibili_today(args.timeout):
-        it["category"] = "acg"
-        it["weight"] = 2
-        items.append(it)
+    today = datetime.now(TZ).strftime("%Y-%m-%d")
+    if not args.date or args.date == today:
+        for it in bilibili_today(args.timeout):
+            it["category"] = "acg"
+            it["weight"] = 2
+            items.append(it)
+
+    # 补写某一天：只留那一天发布（或没有时间戳）的条目
+    if until is not None:
+        items = [it for it in items if it["when"] is None or since <= it["when"] < until]
 
     # 4Gamers 也会发手机/硬件稿：标题里没有 ACG 关键词、只有消费电子词的，改判科技
     HARDWARE = (

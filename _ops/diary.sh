@@ -135,7 +135,11 @@ if ! "$PY" _ops/collect_chat.py "${CHAT_ARGS[@]}" >"$CHAT_TMP" 2>>"$LOG"; then
   echo "（聊天记录没读出来，今天先不写这个）。" >"$CHAT_TMP"
 fi
 
-if ! "$PY" _ops/collect_news.py --hours 48 --limit 8 >"$NEWS_TMP" 2>>"$LOG"; then
+NEWS_ARGS=(--hours 48 --limit 8)
+if [[ -n "$TARGET_DATE" || "$FORCE" -eq 1 ]]; then
+  NEWS_ARGS+=(--date "$DATE")
+fi
+if ! "$PY" _ops/collect_news.py "${NEWS_ARGS[@]}" >"$NEWS_TMP" 2>>"$LOG"; then
   echo "（今天没抓到什么新闻，可能是网又抽了）。" >"$NEWS_TMP"
 fi
 
