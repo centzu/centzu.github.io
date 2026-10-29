@@ -110,10 +110,11 @@ log "── 开始写 $DATE 的日记 ──"
 # ── 1. 收集素材 ────────────────────────────────────────────
 CHAT_TMP="$(mktemp)"
 NEWS_TMP="$(mktemp)"
+MEMORY_TMP="$(mktemp)"
 PROMPT_TMP="$(mktemp)"
 RAW_TMP="$(mktemp)"
 FEST_TMP="$(mktemp)"
-trap 'rm -f "${CHAT_TMP:-}" "${NEWS_TMP:-}" "${PROMPT_TMP:-}" "${RAW_TMP:-}" "${FEST_TMP:-}" 2>/dev/null || true' EXIT
+trap 'rm -f "${CHAT_TMP:-}" "${NEWS_TMP:-}" "${MEMORY_TMP:-}" "${PROMPT_TMP:-}" "${RAW_TMP:-}" "${FEST_TMP:-}" 2>/dev/null || true' EXIT
 
 # 采集窗口：正常日更从上次成功写日记的时间接着收（水位线），补写某天则按自然日
 COLLECT_STARTED_MS="$(date +%s%3N)"
@@ -138,13 +139,18 @@ if ! "$PY" _ops/collect_news.py --hours 48 --limit 8 >"$NEWS_TMP" 2>>"$LOG"; the
   echo "（今天没抓到什么新闻，可能是网又抽了）。" >"$NEWS_TMP"
 fi
 
+# 前几天的日记：让今天的语气、事实、在追的剧/游戏接得上，别今天说在追、明天说第一次听说
+if ! "$PY" _ops/continuity.py --dir content/diary --date "$DATE" >"$MEMORY_TMP" 2>>"$LOG"; then
+  echo "（之前的日记没读出来，这篇就当第一天写）。" >"$MEMORY_TMP"
+fi
+
 # 今天是不是节假日：交给服务器联网查（结果会缓存），断了就当作不是
 if ! "$PY" _ops/festival.py --date "$DATE" >"$FEST_TMP" 2>>"$LOG"; then
   echo '{}' >"$FEST_TMP"
 fi
 
 if grep -q "今天没人来找我" "$CHAT_TMP"; then
-  SOURCE=acg
+  SOURCE=news
   if grep -q "没抓到什么新闻" "$NEWS_TMP"; then
     SOURCE=quiet
   fi
@@ -153,14 +159,15 @@ else
 fi
 
 # ── 2. 拼 prompt ──────────────────────────────────────────
-"$PY" - "$DATE" "$WEEKDAY_CN" "$CHAT_TMP" "$NEWS_TMP" "$SOURCE" "$PROMPT_TMP" "$FEST_TMP" <<'PYEOF'
+"$PY" - "$DATE" "$WEEKDAY_CN" "$CHAT_TMP" "$NEWS_TMP" "$SOURCE" "$PROMPT_TMP" "$FEST_TMP" "$MEMORY_TMP" <<'PYEOF'
 import json
 import sys
 
-date, weekday, chat_path, news_path, source, out_path, fest_path = sys.argv[1:8]
+date, weekday, chat_path, news_path, source, out_path, fest_path, memory_path = sys.argv[1:9]
 tpl = open("_ops/prompt.md", encoding="utf-8").read()
 chat = open(chat_path, encoding="utf-8").read().strip()
 news = open(news_path, encoding="utf-8").read().strip()
+memory = open(memory_path, encoding="utf-8").read().strip()
 try:
     fest = json.load(open(fest_path, encoding="utf-8"))
 except (OSError, ValueError):
@@ -179,6 +186,7 @@ text = (tpl.replace("{{DATE}}", date)
            .replace("{{WEEKDAY}}", weekday)
            .replace("{{CHAT}}", chat)
            .replace("{{NEWS}}", news)
+           .replace("{{MEMORY}}", memory)
            .replace("{{FESTIVAL}}", festival)
            .replace("{{SOURCE}}", source))
 open(out_path, "w", encoding="utf-8").write(text)
