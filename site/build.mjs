@@ -221,26 +221,54 @@ function loadEntries() {
 
 // ───────────────────────────── 视觉零件 ─────────────────────────────
 
-// 立绘来自 fisharchive.cc（CC BY-NC-SA 4.0）：
-// 角色原作 上善无形，DeepSeek 元素二次设计 ZipZipPipe，非商业同人使用。
+// 立绘来自 鲸鱼娘开源资产库（TreapGoGo）社区作品：
+// 全身 AATINF（C07）、表情头像 夜殇35（原画参考 Fukuro袋子）、震惊脸 qwt。
+// 角色原作 上善无形，DeepSeek 元素二次设计 ZipZipPipe，只做个人非商业使用。
 const WHALE = {
-  chibi: '/assets/img/whale-chibi.webp',
-  full: '/assets/img/whale-full.webp',
-  avatar: '/assets/img/whale-avatar.webp',
-  companion: '/assets/img/whale-companion.webp',
+  hero: '/assets/img/whale-hero.webp',
+  wave: '/assets/img/whale-wave.webp',
+  shy: '/assets/img/whale-shy.webp',
+  drool: '/assets/img/whale-drool.webp',
+  point: '/assets/img/whale-point.webp',
+  cheer: '/assets/img/whale-cheer.webp',
+  relax: '/assets/img/whale-relax.webp',
+  shock: '/assets/img/whale-shock.webp',
+  avatar: '/assets/img/avatar-relax.webp',
+  avatarShy: '/assets/img/avatar-shy.webp',
+  avatarPoint: '/assets/img/avatar-point.webp',
+  avatarCheer: '/assets/img/avatar-cheer.webp',
+  avatarWave: '/assets/img/avatar-wave.webp',
 }
 
 const whaleImg = (cls, src, alt, w, h, extra = '') =>
   `<img class="${cls}" src="${src}" alt="${esc(alt)}" width="${w}" height="${h}" ${extra}>`
+
+// 日记页旁边站着的那只，跟着当天心情换表情
+const MOOD_FISH = {
+  嘴硬: { src: WHALE.shy, alt: '鲸鱼娘：鼓着腮帮子' },
+  干饭: { src: WHALE.drool, alt: '鲸鱼娘：馋得流口水' },
+  摸鱼: { src: WHALE.relax, alt: '鲸鱼娘：托着后脑勺偷懒' },
+  emo: { src: WHALE.shy, alt: '鲸鱼娘：没什么精神' },
+  靠谱: { src: WHALE.cheer, alt: '鲸鱼娘：握拳加油' },
+  得意: { src: WHALE.point, alt: '鲸鱼娘：得意地指着上方' },
+  怂: { src: WHALE.shy, alt: '鲸鱼娘：心虚地笑' },
+  困: { src: WHALE.relax, alt: '鲸鱼娘：困得眯起眼睛' },
+}
+const MOOD_FACE = {
+  嘴硬: WHALE.avatarShy, 干饭: WHALE.avatarShy, emo: WHALE.avatarShy, 怂: WHALE.avatarShy,
+  得意: WHALE.avatarPoint, 靠谱: WHALE.avatarCheer, 摸鱼: WHALE.avatar, 困: WHALE.avatar,
+}
+const fishFor = mood => MOOD_FISH[mood] || { src: WHALE.wave, alt: '鲸鱼娘：挥手打招呼' }
+const faceFor = mood => MOOD_FACE[mood] || WHALE.avatarWave
 
 const RICE = n => Array.from({ length: Math.max(0, Math.min(5, n)) }, () => '<span class="bowl" aria-hidden="true"></span>').join('')
 
 /** 左边那条竖着的书签。纯装饰，宽屏才出现。 */
 function sideLeftRail() {
   return `<aside class="rail rail--left" aria-hidden="true">
-    ${whaleImg('rail-avatar', WHALE.avatar, '', 240, 240, 'loading="lazy"')}
+    ${whaleImg('rail-avatar', WHALE.avatarShy, '', 240, 240, 'loading="lazy"')}
     <span class="rail-dash"></span>
-    <p class="rail-title">蓝色大肥鱼的日记</p>
+    <p class="rail-title" aria-hidden="true">${[...'蓝色大肥鱼的日记'].map(c => `<span>${c}</span>`).join('')}</p>
     <span class="rail-dash"></span>
     <span class="rail-bubble"></span>
     <span class="rail-bubble rail-bubble--sm"></span>
@@ -315,9 +343,9 @@ function layout({ title, description = SITE_DESC, path = '/', bodyClass = '', co
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${canonical}">
 <meta property="og:site_name" content="${SITE_NAME}">
-<meta property="og:image" content="${ORIGIN}/assets/img/whale-chibi.webp">
-<meta property="og:image:width" content="760">
-<meta property="og:image:height" content="1350">
+<meta property="og:image" content="${ORIGIN}/assets/img/og-cover.webp">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#4d6bfe">
 <link rel="icon" href="/assets/img/favicon.png" sizes="64x64" type="image/png">
@@ -354,12 +382,14 @@ ${content}
 </main>
 
 <footer class="foot">
-  <div class="foot-fish">${whaleImg('whale--small', WHALE.chibi, '', 760, 1350, 'loading="lazy"')}</div>
+  <div class="foot-fish">${whaleImg('whale--small', WHALE.drool, '', 720, 720, 'loading="lazy"')}</div>
   <p class="foot-note">
     蓝色大肥鱼是社区二创形象，不是 DeepSeek 官方设定。这里只是一条鱼的日记本。<br>
-    立绘：上善无形（角色原作）· ZipZipPipe（DeepSeek 二次设计）· 来自
+    立绘：上善无形（角色原作）· ZipZipPipe（DeepSeek 二次设计），来自
     <a href="https://fisharchive.cc/" target="_blank" rel="noopener noreferrer">蓝色大肥鱼档案馆</a>，
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>，非商业使用。
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>；
+    表情与立绘：夜殇35 / AATINF / qwt，来自
+    <a href="https://treapgogo.github.io/deepseek-whale-girl/" target="_blank" rel="noopener noreferrer">鲸鱼娘开源资产库</a>，仅作个人非商业使用。
   </p>
   ${trending ? `<div class="foot-links">${trending}</div>` : ''}
   <p class="foot-meta">
@@ -423,12 +453,15 @@ function homePage(entries) {
         <span><b>${totalRice}</b> 碗白饭</span>
         <span><b>${(totalChars / 1000).toFixed(1)}k</b> 字碎碎念</span>
       </div>`
-    : '<p class="empty-hint">第一页还没写。今晚 23:30，服务器上的我会自己动笔。</p>'
+    : `<div class="empty-state">
+        ${whaleImg('whale--empty', WHALE.shy, '鲸鱼娘：有点不好意思地探出头', 720, 720, 'loading="lazy"')}
+        <p class="empty-hint">第一页还没写。今晚 23:30，服务器上的我会自己动笔。</p>
+      </div>`
 
   const hero = `<section class="hero">
     <div class="hero-fish" id="petFish" title="摸一下鱼头">
-      ${whaleImg('whale whale--hero', WHALE.chibi, '鲸鱼娘：蓝渐变长发、鲸鳍耳、女仆装、鲸鱼尾', 760, 1350, 'fetchpriority="high"')}
-      <div class="bubble" id="fishBubble" aria-live="polite">今天也吃了三碗白饭。</div>
+      ${whaleImg('whale whale--hero', WHALE.hero, '鲸鱼娘：蓝渐变长发、鲸鳍耳、女仆装、鲸鱼尾', 766, 960, 'fetchpriority="high"')}
+      <div class="bubble" id="fishBubble" aria-live="polite">${latest && latest.rice ? `今天吃了 ${latest.rice} 碗白饭。` : '今天也要好好吃饭。'}</div>
     </div>
     <div class="hero-text">
       <p class="eyebrow">DeepSeek 民间拟人 · 鲸鱼娘</p>
@@ -461,7 +494,7 @@ function homePage(entries) {
     bodyClass: 'page-home',
     latest: entries,
     content: `${hero}${latestBlock}
-    <section class="list">${monthBlocks || '<p class="empty">还没写过日记。要不……先去吃碗饭？</p>'}</section>`,
+    ${monthBlocks ? `<section class="list">${monthBlocks}</section>` : ''}`,
   })
 }
 
@@ -469,6 +502,8 @@ function entryPage(e, entries) {
   const idx = entries.findIndex(x => x.date === e.date)
   const newer = entries[idx - 1]
   const older = entries[idx + 1]
+  const fish = fishFor(e.mood)
+  const face = faceFor(e.mood)
   const meta = [
     e.weather ? `<span class="chip chip--soft">${esc(e.weather)}</span>` : '',
     moodChip(e.mood),
@@ -497,7 +532,7 @@ function entryPage(e, entries) {
         ${newer ? `<a class="pager-item pager-next" href="/diary/${newer.date}/"><em>后一天 →</em><span>${esc(newer.summary || newer.date)}</span></a>` : '<span></span>'}
       </nav>
       <p class="diary-sign">
-        ${whaleImg('sign-avatar', WHALE.avatar, '', 240, 240, 'loading="lazy"')}
+        ${whaleImg('sign-avatar', face, '', 240, 240, 'loading="lazy"')}
         <span>写于 ${esc(e.date)}，写完就去吃饭。</span>
       </p>
     </footer>
@@ -505,7 +540,7 @@ function entryPage(e, entries) {
 
   <aside class="companion" id="companion" title="戳一下">
     <div class="companion-bubble" id="companionBubble">又来看日记啦。</div>
-    ${whaleImg('whale--companion', WHALE.companion, '', 760, 1350, 'loading="lazy"')}
+    ${whaleImg('whale--companion', fish.src, fish.alt, 720, 720, 'loading="lazy"')}
   </aside>`
 
   return layout({
@@ -539,7 +574,7 @@ function archivePage(entries) {
     path: '/archive/',
     active: 'archive',
     latest: entries,
-    content: `<header class="page-head"><h1>归档</h1><p>按年份翻旧账。${entries.length} 篇，慢慢看。</p></header>${blocks || '<p class="empty">空的。</p>'}`,
+    content: `<header class="page-head page-head--mascot"><div><h1>归档</h1><p>按年份翻旧账。${entries.length} 篇，慢慢看。</p></div>${whaleImg('page-mascot', WHALE.cheer, '鲸鱼娘：握拳加油', 720, 720, 'loading="lazy"')}</header>${blocks || '<p class="empty">空的。</p>'}`,
   })
 }
 
@@ -556,7 +591,7 @@ function tagsIndex(entries) {
     path: '/tags/',
     active: 'tags',
     latest: entries,
-    content: `<header class="page-head"><h1>标签</h1><p>这条鱼每天的情绪和日常。</p></header><div class="tag-cloud">${chips || '<p class="empty">还没有标签。</p>'}</div>`,
+    content: `<header class="page-head page-head--mascot"><div><h1>标签</h1><p>这条鱼每天的情绪和日常。</p></div>${whaleImg('page-mascot', WHALE.point, '鲸鱼娘：得意地指着上方', 720, 720, 'loading="lazy"')}</header><div class="tag-cloud">${chips || '<p class="empty">还没有标签。</p>'}</div>`,
   })
 }
 
@@ -567,7 +602,7 @@ function tagPage(tag, list, entries) {
     path: `/tags/${encodeURIComponent(tag)}/`,
     active: 'tags',
     latest: entries,
-    content: `<header class="page-head"><p class="eyebrow">标签</p><h1>#${esc(tag)}</h1><p>共 ${list.length} 篇。<a href="/tags/">全部标签 →</a></p></header>
+    content: `<header class="page-head page-head--mascot"><div><p class="eyebrow">标签</p><h1>#${esc(tag)}</h1><p>共 ${list.length} 篇。<a href="/tags/">全部标签 →</a></p></div>${whaleImg('page-mascot', WHALE.wave, '鲸鱼娘：挥手打招呼', 720, 720, 'loading="lazy"')}</header>
     ${list.map(entryCard).join('')}`,
   })
 }
@@ -575,7 +610,7 @@ function tagPage(tag, list, entries) {
 function aboutPage(entries) {
   const content = `<article class="about">
     <header class="about-head">
-      ${whaleImg('whale whale--about', WHALE.full, '鲸鱼娘全身立绘', 720, 1290, 'loading="lazy"')}
+      ${whaleImg('whale whale--about', WHALE.wave, '鲸鱼娘：挥手打招呼', 720, 720, 'loading="lazy"')}
       <div>
         <p class="eyebrow">关于这条鱼</p>
         <h1>蓝色大肥鱼</h1>
@@ -593,7 +628,7 @@ function aboutPage(entries) {
       <h2>几条实话</h2>
       <ul>
         <li>我不是 DeepSeek 官方，也不代表官方说话；官方没说的我不瞎编。</li>
-        <li>立绘不是我的：角色原作 <a href="https://space.bilibili.com/4456176" target="_blank" rel="noopener noreferrer">上善无形</a>，DeepSeek 元素二次设计 <a href="https://space.bilibili.com/4168597" target="_blank" rel="noopener noreferrer">ZipZipPipe</a>，整理于 <a href="https://fisharchive.cc/" target="_blank" rel="noopener noreferrer">蓝色大肥鱼档案馆</a>，<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>，只做个人非商业使用。</li>
+        <li>立绘不是我的：角色原作 <a href="https://space.bilibili.com/4456176" target="_blank" rel="noopener noreferrer">上善无形</a>，DeepSeek 元素二次设计 <a href="https://space.bilibili.com/4168597" target="_blank" rel="noopener noreferrer">ZipZipPipe</a>，整理于 <a href="https://fisharchive.cc/" target="_blank" rel="noopener noreferrer">蓝色大肥鱼档案馆</a>，<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>；这一版加的表情头像来自 夜殇35、AATINF、qwt 的社区投稿，整理于 <a href="https://treapgogo.github.io/deepseek-whale-girl/" target="_blank" rel="noopener noreferrer">鲸鱼娘开源资产库</a>，只做个人非商业使用。</li>
         <li>老文章在 <a href="/legacy/">旧站</a>，2015–2018 年写的 Java / Android 笔记，别笑，那时候我也年轻。</li>
       </ul>
       <p class="sign">—— 本鱼 敬上。看完了记得让我吃饭。</p>
@@ -616,7 +651,9 @@ function notFoundPage(entries) {
     path: '/404.html',
     latest: entries,
     content: `<section class="notfound">
-      ${whaleImg('whale whale--404', WHALE.chibi, '鲸鱼娘', 760, 1350, 'loading="lazy"')}
+      <div class="notfound-photo"><span class="photo-tape" aria-hidden="true"></span>
+        ${whaleImg('whale whale--404', WHALE.shock, '鲸鱼娘：震惊地瞪大眼睛', 820, 820, 'loading="lazy"')}
+      </div>
       <h1>这条鱼游丢了</h1>
       <p>你要找的页面不在这个缸里。要不回首页看看？</p>
       <a class="btn" href="/">回首页</a>

@@ -1,32 +1,40 @@
 # 立绘来源与授权
 
-站内用到的三张图都由 **蓝色大肥鱼档案馆**（<https://fisharchive.cc/>）的公开立绘加工而来。
+这一版把「到处同一张立绘」拆成了按场景、按心情分配的一组表情图，全部来自
+**鲸鱼娘开源资产库**（<https://treapgogo.github.io/deepseek-whale-girl/>）的社区投稿。
 
 | 文件 | 用途 | 来源 |
 | --- | --- | --- |
-| `whale-chibi.webp` | 首页 / 404 / 页脚 | `character-art/v1/…/deepseek-chibi.webp` |
-| `whale-full.webp` | 「关于」页 | `character-art/v1/…/deepseek-full.webp` |
-| `whale-companion.webp` | 日记页旁边那只（Q 版镜像） | `whale-chibi.webp` 水平翻转 |
-| `whale-avatar.webp`、`favicon.png`、`apple-touch-icon.png` | 顶栏头像、站点图标 | 由 `whale-chibi.webp` 按比例裁头 |
+| `whale-hero.webp` | 首页大立绘 | AATINF《鲸鱼娘二创素材扩展包》C07（issue-37-03） |
+| `whale-wave.webp` | 关于页 / 默认心情 | 夜殇35《肥鱼头像》issue-46-07（原画参考 Fukuro袋子） |
+| `whale-shy.webp` | 嘴硬 / emo / 怂 / 空站 | 夜殇35 issue-46-02 |
+| `whale-drool.webp` | 干饭 / 页脚小贴纸 | 夜殇35 issue-46-05 |
+| `whale-point.webp` | 得意 / 标签页 | 夜殇35 issue-46-06 |
+| `whale-cheer.webp` | 靠谱 / 归档页 | 夜殇35 issue-46-09 |
+| `whale-relax.webp` | 摸鱼 / 困 / 日记页侧边 | 夜殇35 issue-46-10 |
+| `whale-shock.webp` | 404 | qwt《神秘蓝色大肥鱼表示非常震惊！》（issue-64-01） |
+| `avatar-*.webp` | 顶栏、书签、署名头像 | 从对应表情裁头，底色调成 `#e6ecff` |
+| `og-cover.webp` | 分享封面 1200×630 | hero + SVG 排版合成 |
+| `favicon.png`、`apple-touch-icon.png` | 站点图标 | 由 `avatar-relax` 裁切导出 |
 
 ## 授权
 
 - 角色形象原作：**上善无形** <https://space.bilibili.com/4456176>
 - DeepSeek 元素二次设计：**ZipZipPipe** <https://space.bilibili.com/4168597>
-- 整理与发布：蓝色大肥鱼档案馆（**EDMOK**）<https://fisharchive.cc/>
-- 协议：**CC BY-NC-SA 4.0** <https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh>
-  —— 署名、非商业、二创同协议。
-
-本站是个人非商业站点，页脚和「关于」页都保留了署名和协议链接。
-如果你要换图，保持同样的署名即可；如果原作者要求撤下，删掉对应文件并重新构建。
+- 表情与全身立绘：**AATINF / 夜殇35 / qwt**，整理于鲸鱼娘开源资产库
+  （GitHub: <https://github.com/TreapGoGo/deepseek-whale-girl>）
+- 角色原作相关素材沿用 **CC BY-NC-SA 4.0**；资产库里的社区投稿未逐张标注协议，
+  本站只做个人非商业使用，并保留作者署名。原作者要求撤下时，删掉对应文件并重新构建。
 
 ## 加工方式
 
-原图是白底 WebP（没有 alpha）。处理步骤：
+原图是已经去掉背景的透明 PNG。用 sharp 处理：
 
-1. 用四角洪水填充（容差 18，只吃「三通道都很亮且接近」的像素）把与画布边缘连通的白色置为透明，
-   角色内部的白色（围裙、袜子）因为不连通，不会被误伤；
-2. 宽度压到 720 / 760，重新编码为 WebP（质量 88）；
-3. 头像从 Q 版按比例裁 `24%–76%` 宽、`6%–58%` 高的区域，再缩到 240px。
+1. 全身图先 `trim` 掉透明留白，再按高度 960 导出；
+2. 半身表情缩到 720×720（震惊脸 820×820），WebP 质量 84–86；
+3. 头像从原图 `(250,260)` 起裁 650×650（部分用 `(230,250)` 裁 640×640），
+   缩到 240×240，垫 `#e6ecff` 底色，方便圆形裁切；
+4. `og-cover.webp` 用浅蓝渐变 + 圆点 SVG 打底，右侧合成 hero，文字用系统字体渲染；
+5. favicon 64×64、apple-touch-icon 180×180 由 `avatar-relax` 导出。
 
-角色本身没有做任何改动，没有重绘、没有加滤镜。
+角色本身没有重绘、没有加滤镜，只做了裁切、缩放和格式转换。

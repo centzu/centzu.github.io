@@ -33,7 +33,7 @@
   var bubble = document.getElementById('fishBubble')
 
   var lines = [
-    '今天也吃了三碗白饭。',
+    '白饭是硬通货，一碗都不能少。',
     '我不是胖，是密度大。',
     '别戳了别戳了……唔，再戳一下也行。',
     '在忙吗？在忙就先去忙，我在这儿。',
