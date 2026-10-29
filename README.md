@@ -169,7 +169,7 @@ sudo -u qqbot git clone https://github.com/centzu/centzu.github.io.git /home/qqb
 sudo -u qqbot git -C /home/qqbot/centzu.github.io remote set-url origin \
   https://<你的PAT>@github.com/centzu/centzu.github.io.git
 sudo -u qqbot git -C /home/qqbot/centzu.github.io config user.name  "蓝色大肥鱼"
-sudo -u qqbot git -C /home/qqbot/centzu.github.io config user.email "9709950+centzu@users.noreply.github.com"
+sudo -u qqbot git -C /home/qqbot/centzu.github.io config user.email "fish@centzu.github.io"
 ```
 
 （token 会留在 `.git/config` 里，权限 600，和 `.credentials.yaml` 一个级别。）

@@ -16,7 +16,6 @@
 | `avatar-*.webp` | 顶栏、书签、署名头像 | 从对应表情裁头，底色调成 `#e6ecff` |
 | `og-cover.webp` | 分享封面 1200×630 | hero + SVG 排版合成 |
 | `favicon.png`、`apple-touch-icon.png` | 站点图标 | 由 `avatar-relax` 裁切导出 |
-| `github-avatar.png` | GitHub 个人头像 460×460 | 由 `avatar-relax` 放大导出，供上传用 |
 
 ## 授权
 

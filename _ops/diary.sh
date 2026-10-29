@@ -350,7 +350,7 @@ fi
 
 git add -A
 git -c user.name="${GIT_AUTHOR_NAME:-蓝色大肥鱼}" \
-    -c user.email="${GIT_AUTHOR_EMAIL:-9709950+centzu@users.noreply.github.com}" \
+    -c user.email="${GIT_AUTHOR_EMAIL:-fish@centzu.github.io}" \
     commit -q -m "diary: $DATE"
 log "✓ 已提交"
 
