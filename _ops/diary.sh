@@ -114,11 +114,12 @@ MEMORY_TMP="$(mktemp)"
 PROMPT_TMP="$(mktemp)"
 RAW_TMP="$(mktemp)"
 FEST_TMP="$(mktemp)"
-trap 'rm -f "${CHAT_TMP:-}" "${NEWS_TMP:-}" "${MEMORY_TMP:-}" "${PROMPT_TMP:-}" "${RAW_TMP:-}" "${FEST_TMP:-}" 2>/dev/null || true' EXIT
+LIFE_TMP="$(mktemp)"
+trap 'rm -f "${CHAT_TMP:-}" "${NEWS_TMP:-}" "${MEMORY_TMP:-}" "${PROMPT_TMP:-}" "${RAW_TMP:-}" "${FEST_TMP:-}" "${LIFE_TMP:-}" 2>/dev/null || true' EXIT
 
 # 采集窗口：正常日更从上次成功写日记的时间接着收（水位线），补写某天则按自然日
 COLLECT_STARTED_MS="$(date +%s%3N)"
-CHAT_ARGS=(--hours 26)
+CHAT_ARGS=(--hours 26 --digest)
 if [[ -n "$TARGET_DATE" ]]; then
   CHAT_ARGS+=(--date "$TARGET_DATE")
 elif [[ "$FORCE" -eq 1 ]]; then
@@ -132,7 +133,7 @@ elif [[ -s "$WATERMARK_FILE" ]]; then
 fi
 
 if ! "$PY" _ops/collect_chat.py "${CHAT_ARGS[@]}" >"$CHAT_TMP" 2>>"$LOG"; then
-  echo "（聊天记录没读出来，今天先不写这个）。" >"$CHAT_TMP"
+  echo "这段时间没有和主人聊天。" >"$CHAT_TMP"
 fi
 
 NEWS_ARGS=(--hours 48 --limit 8)
@@ -153,7 +154,14 @@ if ! "$PY" _ops/festival.py --date "$DATE" >"$FEST_TMP" 2>>"$LOG"; then
   echo '{}' >"$FEST_TMP"
 fi
 
-if grep -q "今天没人来找我" "$CHAT_TMP"; then
+# 今天的写作主题 + 固定世界 + 兴趣 + 还没做完的小事
+if ! "$PY" _ops/life.py --plan --date "$DATE" --dir content/diary >"$LIFE_TMP" 2>>"$LOG"; then
+  printf 'THEME: 日常生活\n\n【今天的生活底子】\n（今天没有额外素材，按平常写。）\n' >"$LIFE_TMP"
+fi
+THEME="$(sed -n 's/^THEME: //p' "$LIFE_TMP" | head -n 1)"
+[[ -n "$THEME" ]] || THEME="日常生活"
+
+if grep -q "没有和主人聊天" "$CHAT_TMP"; then
   SOURCE=news
   if grep -q "没抓到什么新闻" "$NEWS_TMP"; then
     SOURCE=quiet
@@ -163,15 +171,19 @@ else
 fi
 
 # ── 2. 拼 prompt ──────────────────────────────────────────
-"$PY" - "$DATE" "$WEEKDAY_CN" "$CHAT_TMP" "$NEWS_TMP" "$SOURCE" "$PROMPT_TMP" "$FEST_TMP" "$MEMORY_TMP" <<'PYEOF'
+"$PY" - "$DATE" "$WEEKDAY_CN" "$CHAT_TMP" "$NEWS_TMP" "$SOURCE" "$PROMPT_TMP" "$FEST_TMP" "$MEMORY_TMP" "$LIFE_TMP" <<'PYEOF'
 import json
 import sys
 
-date, weekday, chat_path, news_path, source, out_path, fest_path, memory_path = sys.argv[1:9]
+date, weekday, chat_path, news_path, source, out_path, fest_path, memory_path, life_path = sys.argv[1:10]
 tpl = open("_ops/prompt.md", encoding="utf-8").read()
 chat = open(chat_path, encoding="utf-8").read().strip()
 news = open(news_path, encoding="utf-8").read().strip()
 memory = open(memory_path, encoding="utf-8").read().strip()
+life = "\n".join(
+    line for line in open(life_path, encoding="utf-8").read().strip().splitlines()
+    if not line.startswith("THEME:")
+)
 try:
     fest = json.load(open(fest_path, encoding="utf-8"))
 except (OSError, ValueError):
@@ -188,6 +200,7 @@ else:
 
 text = (tpl.replace("{{DATE}}", date)
            .replace("{{WEEKDAY}}", weekday)
+           .replace("{{LIFE}}", life)
            .replace("{{CHAT}}", chat)
            .replace("{{NEWS}}", news)
            .replace("{{MEMORY}}", memory)
@@ -232,102 +245,14 @@ if [[ "$ok" -ne 1 ]]; then
 fi
 
 # ── 4. 清洗与校验 ─────────────────────────────────────────
-"$PY" - "$RAW_TMP" "$ENTRY" "$DATE" "$SOURCE" "$LOG" "$FEST_TMP" <<'PYEOF'
-import json
-import re
-import sys
-
-raw_path, entry_path, date, source, log_path, fest_path = sys.argv[1:7]
-raw = open(raw_path, encoding="utf-8").read().replace("\r\n", "\n").strip()
-
-# 去掉模型偶尔加的代码块围栏和开场白
-raw = re.sub(r"^```[a-zA-Z]*\n", "", raw)
-raw = re.sub(r"\n```$", "", raw).strip()
-if not raw.startswith("---"):
-    idx = raw.find("\n---")
-    if idx != -1:
-        raw = raw[idx + 1:]
-
-
-def fail(reason):
-    with open(log_path, "a", encoding="utf-8") as fh:
-        fh.write("[!] 输出不合格：" + reason + "\n")
-    print("! 输出不合格：" + reason, file=sys.stderr)
-    sys.exit(3)
-
-
-m = re.match(r"^---\n(.*?)\n---\n?(.*)$", raw, re.S)
-if not m:
-    fail("没有找到 --- front-matter ---")
-
-head, body = m.group(1), m.group(2).strip()
-fields = {}
-for line in head.split("\n"):
-    if ":" in line:
-        key, value = line.split(":", 1)
-        fields[key.strip()] = value.strip()
-
-if not fields.get("date"):
-    fail("front-matter 缺 date")
-
-fields["date"] = date
-fields["source"] = source
-
-try:
-    fest = json.load(open(fest_path, encoding="utf-8"))
-except (OSError, ValueError):
-    fest = {}
-if fest.get("name"):
-    fields["festival"] = fest["name"]
-else:
-    fields.pop("festival", None)
-
-body = re.sub(r"^(正文|日记|正文：)[:：]?\s*", "", body).strip()
-body_chars = len(re.sub(r"\s", "", body))
-if body_chars < 150:
-    fail("正文太短（%d 字）" % body_chars)
-if body_chars > 2000:
-    body = body[:2000]
-
-# 发布前自检：正文是公开的，出现这些就说明脱敏没兜住
-leaks = []
-if re.search(r"\d{6,}", body):
-    leaks.append("6 位以上数字")
-if re.search(r"[\w.+-]+@[\w-]+\.[\w.]+", body):
-    leaks.append("邮箱")
-if re.search(r"@\S+", body):
-    leaks.append("@昵称")
-if re.search(r"https?://", body):
-    leaks.append("链接")
-if leaks:
-    fail("正文里出现" + "、".join(leaks) + "，可能泄露隐私，不发布")
-
-# 私事只写「有人来聊了会儿」这一层：具体话题（钱、病、感情、工作）不进公开正文
-PRIVATE_WORDS = (
-    "房贷", "贷款", "月供", "首付", "公积金", "工资", "薪水", "年终奖",
-    "借钱", "欠款", "彩礼", "房租",
-)
-probe = body + "\n" + " ".join(str(fields.get(k, "")) for k in ("summary", "tags"))
-hit = [w for w in PRIVATE_WORDS if w in probe]
-if hit:
-    fail("正文/摘要写到私事细节（" + "、".join(hit) + "），不发布")
-
-if not fields.get("summary"):
-    fields["summary"] = body.replace("\n", " ")[:18]
-if not fields.get("mood"):
-    fields["mood"] = "摸鱼"
-if "tags" not in fields:
-    fields["tags"] = "[日常]"
-
-order = ["date", "mood", "weather", "rice", "tags", "summary", "festival", "source"]
-out_head = "\n".join("%s: %s" % (k, fields[k]) for k in order if k in fields)
-text = "---\n%s\n---\n\n%s\n" % (out_head, body)
-open(entry_path, "w", encoding="utf-8").write(text)
-print("✓ 写入 %s（%d 字）" % (entry_path, body_chars))
-PYEOF
-
+if ! "$PY" _ops/clean_diary.py --raw "$RAW_TMP" --entry "$ENTRY" --date "$DATE" \
+      --source "$SOURCE" --log "$LOG" --fest "$FEST_TMP" --dir content/diary; then
+  log "✗ 输出不合格，今天先不写（不会推送半成品）"
+  exit 1
+fi
 # 素材已经写进日记了，记下这次采集的起点；补写历史日期不动水位线
 if [[ -z "$TARGET_DATE" ]]; then
+  "$PY" _ops/life.py --commit --date "$DATE" --theme "$THEME" >>"$LOG" 2>&1 || true
   printf '%s\n' "$COLLECT_STARTED_MS" >"$WATERMARK_FILE"
 fi
 

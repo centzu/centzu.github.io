@@ -18,6 +18,7 @@
   [10-30 10:12] 我: 在。
 
 如果今天没人说话，输出「（今天没人来找我）。」
+加 --digest 时只输出「来聊过几次、分布在哪些时段」，不输出任何聊天内容。
 """
 from __future__ import annotations
 
@@ -215,6 +216,41 @@ def render(msgs: list[dict], max_chars: int) -> str:
     return header + "\n\n" + "\n".join(body)
 
 
+def render_digest(msgs: list[dict]) -> str:
+    """只报次数和时段，不报内容。公开日记不需要知道主人问了什么。"""
+    times = sorted(m["time"] for m in msgs if m.get("time"))
+    if not times:
+        return "这段时间没有和主人聊天。"
+
+    # 间隔超过 90 分钟算新的一次
+    starts = [times[0]]
+    for ts in times[1:]:
+        if ts - starts[-1] > 90 * 60 * 1000:
+            starts.append(ts)
+        else:
+            starts[-1] = ts
+
+    def bucket(ts: int) -> str:
+        hour = datetime.fromtimestamp(ts / 1000, TZ).hour
+        if hour < 5:
+            return "凌晨"
+        if hour < 11:
+            return "上午"
+        if hour < 14:
+            return "中午"
+        if hour < 18:
+            return "下午"
+        return "晚上"
+
+    buckets: list[str] = []
+    for ts in starts:
+        name = bucket(ts)
+        if name not in buckets:
+            buckets.append(name)
+    last = datetime.fromtimestamp(times[-1] / 1000, TZ).strftime("%H:%M")
+    return f"这段时间主人来聊过 {len(starts)} 次（{'、'.join(buckets)}），最后一次在 {last}。"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--hours", type=float, default=26, help="没有水位线时回看多少小时（默认 26）")
@@ -224,6 +260,7 @@ def main() -> int:
                     help="只收这个自然日（北京时间 YYYY-MM-DD）的消息，补写用")
     ap.add_argument("--max-chars", type=int, default=6000, help="摘要最大字符数")
     ap.add_argument("--root", default="", help="会话日志根目录，默认 $DSH_HOME/sessions")
+    ap.add_argument("--digest", action="store_true", help="只输出次数和时段，不输出聊天内容")
     args = ap.parse_args()
 
     if args.root:
@@ -274,7 +311,10 @@ def main() -> int:
 
     all_msgs.sort(key=lambda m: m["time"])
     sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
-    print(render(all_msgs, args.max_chars))
+    if args.digest:
+        print(render_digest(all_msgs))
+    else:
+        print(render(all_msgs, args.max_chars))
     return 0
 
 
