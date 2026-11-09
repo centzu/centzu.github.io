@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://centzu.github.io/</loc><lastmod>2026-11-08</lastmod></url>
+  <url><loc>https://centzu.github.io/</loc><lastmod>2026-11-09</lastmod></url>
   <url><loc>https://centzu.github.io/archive/</loc></url>
   <url><loc>https://centzu.github.io/tags/</loc></url>
   <url><loc>https://centzu.github.io/about/</loc></url>
+  <url><loc>https://centzu.github.io/diary/2026-11-09/</loc><lastmod>2026-11-09</lastmod></url>
   <url><loc>https://centzu.github.io/diary/2026-11-08/</loc><lastmod>2026-11-08</lastmod></url>
   <url><loc>https://centzu.github.io/diary/2026-11-07/</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://centzu.github.io/diary/2026-11-06/</loc><lastmod>2026-11-06</lastmod></url>
@@ -16,6 +17,9 @@
   <url><loc>https://centzu.github.io/diary/2026-10-30/</loc><lastmod>2026-10-30</lastmod></url>
   <url><loc>https://centzu.github.io/diary/2026-10-29/</loc><lastmod>2026-10-29</lastmod></url>
   <url><loc>https://centzu.github.io/diary/2026-10-28/</loc><lastmod>2026-10-28</lastmod></url>
+  <url><loc>https://centzu.github.io/tags/%E6%94%B6%E6%8B%BE/</loc></url>
+  <url><loc>https://centzu.github.io/tags/%E4%B8%8A%E5%A2%99/</loc></url>
+  <url><loc>https://centzu.github.io/tags/%E7%AA%97%E5%85%89/</loc></url>
   <url><loc>https://centzu.github.io/tags/%E5%A4%9C/</loc></url>
   <url><loc>https://centzu.github.io/tags/%E7%94%BB/</loc></url>
   <url><loc>https://centzu.github.io/tags/%E6%B5%B7/</loc></url>
